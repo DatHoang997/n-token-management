@@ -5,26 +5,28 @@ import TokenService from '@/service/TokenService'
 import 'antd/dist/antd.css';
 import './style.scss'
 
-const stats = () => {
-  const [name, setName] = useState(''),
-        [network, setNetwork] = useState(''),
-        [symbol, setSymbol] = useState(''),
-        [decimal, setDecimal] = useState(''),
-        [cmcID, setCmcId] = useState(''),
-        [cgkId, setCgkId] = useState(''),
-        [apiSymbol, setApiSymbol] = useState(''),
-        [chainType, setChainType] = useState(''),
-        [address, setAddress] = useState(''),
-        [logo, setLogo] = useState(''),
-        [formatAddress, setFormatAddress] = useState(''),
-        [segWit, setSegWit] = useState(''),
+const editToken = (props) => {
+  const [_id, set_id] = useState(props._id && props._id != undefined ? props._id : ''),
+        [name, setName] = useState(props.name && props.name != undefined ? props.name : ''),
+        [network, setNetwork] = useState(props.network && props.network != undefined ? props.network : ''),
+        [symbol, setSymbol] = useState(props.symbol && props.symbol != undefined ? props.symbol : ''),
+        [decimal, setDecimal] = useState(props.decimal && props.decimal != undefined ? props.decimal : ''),
+        [cmcId, setCmcId] = useState(props.cmcId && props.cmcId != undefined ? props.cmcId : ''),
+        [cgkId, setCgkId] = useState(props.cgkId && props.cgkId != undefined ? props.cgkId : ''),
+        [apiSymbol, setApiSymbol] = useState(props.apiSymbol && props.apiSymbol != undefined ? props.apiSymbol : ''),
+        [chainType, setChainType] = useState(props.chainType && props.chainType != undefined ? props.chainType : ''),
+        [address, setAddress] = useState(props.address && props.address != undefined ? props.address : ''),
+        [logo, setLogo] = useState(props.logo && props.logo != undefined ? props.logo : ''),
+        [formatAddress, setFormatAddress] = useState(props.formatAddress && props.formatAddress != undefined ? props.formatAddress : ''),
+        [keys, setKeys] = useState(props.keys && props.keys != undefined ? props.keys : ''),
+        [segWit, setSegWit] = useState(props.segWit && props.segWit != undefined ? props.segWit : ''),
         [disableSubmit, setDisableSubmit] = useState(false)
 
   const tokenService = new TokenService
 
-  const saveToken = async() => {
+  const editToken = async() => {
     setDisableSubmit(true)
-    tokenService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit)
+    tokenService.editToken(_id, name, network, symbol, decimal, cmcId, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit, keys)
   }
 
   const getSegWit = (checked) => {
@@ -93,7 +95,7 @@ const stats = () => {
           <p>CMC Id :</p>
         </Col>
         <Col span={13}>
-          <Input onChange={(e) => {setCmcId(e.target.value)}} value={cmcID}/>
+          <Input onChange={(e) => {setCmcId(e.target.value)}} value={cmcId}/>
         </Col>
       </Row>
       <Row className="padding-top-md">
@@ -153,8 +155,8 @@ const stats = () => {
       <Row className="padding-top-md">
         <Col span={10}></Col>
         <Col span={13}>
-          <button className="btn-submit margin-top-md" onClick={saveToken}>
-            <span>Nhận bounty ngay</span>
+          <button className="btn-submit margin-top-md" onClick={editToken}>
+            <span>Edit</span>
           </button>
         </Col>
       </Row>
@@ -162,4 +164,4 @@ const stats = () => {
   )
 }
 
-export default stats;
+export default editToken;

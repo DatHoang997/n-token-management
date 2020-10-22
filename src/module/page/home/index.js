@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import StandardPage from '../StandardPage'
-import { Row, Col, Input, Popconfirm } from 'antd'
+import { Row, Col, Input, Popconfirm, Modal } from 'antd'
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import store from '@/store'
 import {useSelector, useDispatch} from "react-redux"
 import TokenService from '@/service/TokenService'
+import EditToken from '../detail/index'
 import 'antd/dist/antd.css';
 import './style.scss'
 
-const stats = () => {
+const home = () => {
   const tokenRedux = store.getRedux('token').actions,
         token = useSelector(state => state.token.listToken),
         tokenSearch = useSelector(state => state.token.searchListToken),
+        [modalDetailVisible, setModalDetailVisible] = useState(false),
         dispatch = useDispatch()
 
   const tokenService = new TokenService
@@ -51,7 +53,11 @@ const stats = () => {
         <Col span={5}>
           <Row className="right-align">
             <Col span={24}>
-              <button className='btn btn-edit'>detail</button>
+              <button className='btn btn-edit'
+              onClick={() => {
+                setModalDetailVisible(key)
+              }}>
+                detail</button>
             </Col>
             <Col span={24}>
               <Popconfirm
@@ -63,6 +69,27 @@ const stats = () => {
               >
                 <button className='btn btn-delete'>remove</button>
               </Popconfirm>
+              <Modal  title='detail'
+                      visible={modalDetailVisible === key}
+                      footer={null}
+                      onCancel={() => setModalDetailVisible(false)}>
+                <EditToken
+                  _id={element._id}
+                  name={element.name}
+                  network={element.network}
+                  symbol={element.symbol}
+                  decimal={element.decimal}
+                  cmcId={element.cmcId}
+                  cgkId={element.cgkId}
+                  apiSymbol={element.apiSymbol}
+                  chainType={element.chainType}
+                  address={element.address}
+                  logo={element.logo}
+                  formatAddress={element.format_address}
+                  segWit={element.segWit}
+                  keys={key}
+                  hideModal={() => setModalDetailVisible(false)}/>
+              </Modal>
             </Col>
           </Row>
         </Col>
@@ -78,9 +105,9 @@ const stats = () => {
         </Col>
       </Row>
       <Input className="margin-top-md" placeholder="search" onChange={searchToken}/>
-     {tokens}
+      {tokens}
     </StandardPage>
   )
 }
 
-export default stats;
+export default home;

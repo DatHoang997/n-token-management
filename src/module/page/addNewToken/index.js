@@ -17,7 +17,7 @@ const stats = () => {
         [address, setAddress] = useState(''),
         [logo, setLogo] = useState(''),
         [formatAddress, setFormatAddress] = useState(''),
-        [segWit, setSegWit] = useState(false),
+        [segWit, setSegWit] = useState(''),
         [disableSubmit, setDisableSubmit] = useState(false)
 
   const tokenService = new TokenService
@@ -153,7 +153,9 @@ const stats = () => {
       <Row className="padding-top-md">
         <Col span={10}></Col>
         <Col span={13}>
-          <button className="btn-submit margin-top-md" onClick={saveToken}>
+          <button className="btn-submit margin-top-md" onClick={saveToken} 
+          // disabled={disableSubmit}
+          >
             <span>Add new Token</span>
           </button>
         </Col>
