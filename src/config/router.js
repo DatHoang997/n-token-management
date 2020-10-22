@@ -1,6 +1,7 @@
 
 import NotFound from '@/module/page/error/notfound'
-import ClaimSRM from '@/module/page/claimSRM/index'
+import AddNewToken from '@/module/page/addNewToken/index'
+import Home from '@/module/page/home/index'
 
 export default [
   // {
@@ -13,8 +14,12 @@ export default [
     page: NotFound
   },
   {
+    path: '/new',
+    page: AddNewToken,
+  },
+  {
     path: '/',
-    page: ClaimSRM,
+    page: Home,
   },
   {
     page: NotFound

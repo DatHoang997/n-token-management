@@ -1,79 +1,72 @@
 import BaseService from '../model/BaseService'
 import axios from 'axios'
-import BigNumber from 'big-number'
 import {thousands} from '@/util/help.js'
 
 let API_URL = process.env.SERVER_URL
 const API = {
-  PUT_POC_STATS   : API_URL + '/pocstats/',
-  GET_HISTORY     : API_URL + '/pocstats/history/',
-  DELETE_STATS    : API_URL + '/pocstats/delete/',
-  VND_POC_PRICE   : API_URL + '/getprice/poc/vnd/',
-  USD_POC_PRICE   : API_URL + '/getprice/poc/usd/',
-  SET_ROLE        : API_URL + '/auth/set-role/'
+  POST_SAVE_TOKEN : API_URL + '/token/save_token/',
+  GET_TOKEN : API_URL + '/token/get_token/',
+  DELETE_TOKEN : API_URL + '/token/delete_token/',
 }
 
-let foundation
 export default class extends BaseService {
-  async pocStats(pocBalance, dead , amount = '', price = '', txHash = '') {
+  async saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit) {
+    console.log(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit)
     var that = this
-    const pocStatsRedux = this.store.getRedux('pocStats')
-    let formData = new FormData();
-    if (amount != '') {
-      formData.append("amount", amount);
-    }
-    if (price != '') {
-      formData.append("price", price);
-    }
-    if (txHash != '') {
-      formData.append("txHash", txHash);
-    }
-    formData.append("pocBalance", pocBalance);
-    formData.append("dead", dead);
+    let formData = new FormData()
+    formData.append("name", name)
+    formData.append("network", network)
+    formData.append("symbol", symbol)
+    formData.append("decimal", decimal)
+    formData.append("cmcId", cmcID)
+    formData.append("cgkId", cgkId)
+    formData.append("apiSymbol", apiSymbol)
+    formData.append("chainType", chainType)
+    formData.append("address", address)
+    formData.append("logo", logo)
+    formData.append("format_address", formatAddress)
+    formData.append("segWit", segWit)
     try {
-      let response = await axios.put(API.PUT_POC_STATS, formData,
+      let response = await axios.post(API.POST_SAVE_TOKEN, formData,
         {
           headers: {"Content-Type": "multipart/form-data"}
         }
       )
-      var data = response.data.data
-      if (data.sold != 0) {
-        if (foundation == BigNumber('2000000000000000000000000').subtract(data.sold).toString()) {
-          data.error = ''
-        }
-        else {
-          data.error = 'Sold balance is not matched'
-        }
-      }
-      that.dispatch(pocStatsRedux.actions.pocStats_update(data))
-      that.history()
-      return false;
+      console.log('response', response)
+      return response;
     } catch (error) {
+      console.log(error)
       return error.response.data;
     }
   }
 
-  async history () {
+  async getToken () {
     const that = this
-    const pocStatsRedux = this.store.getRedux('pocStats')
-    that.dispatch(pocStatsRedux.actions.history_update(''))
-    axios.get(API.GET_HISTORY)
+    const tokenRedux = this.store.getRedux('token')
+    axios.get(API.GET_TOKEN)
       .then(function (response) {
         var data = response.data.data
-        that.dispatch(pocStatsRedux.actions.history_update(data))
+        console.log(data)
+        that.dispatch(tokenRedux.actions.listToken_update(data))
+        that.dispatch(tokenRedux.actions.searchListToken_update(data))
       })
   }
 
-  async deleteStats (statsId, pocBalance, dead) {
+  async deleteToken (_id, key) {
     let that = this
-    if (statsId) {
-      await axios.delete(API.DELETE_STATS + statsId)
+    const tokenRedux = this.store.getRedux('token')
+    if (_id) {
+      console.log('in')
+      await axios.delete(API.DELETE_TOKEN + _id)
       .then(function (response) {
-        that.pocStats(pocBalance, dead)
-        that.history()
-        that.PocPriceVND()
-        that.PocPriceUSD()
-        return false;
+        let listToken = that.store.getState().token.listToken
+        let searchListToken = that.store.getState().token.searchListToken
+        delete listToken[key]
+        delete searchListToken[key]
+        console.log(searchListToken)
+        that.dispatch(tokenRedux.actions.listToken_update(listToken))
+        that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
+        return response;
       })
     } else {
       return "Error"
