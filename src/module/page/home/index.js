@@ -58,7 +58,7 @@ const home = () => {
           <Row className="right-align">
             <Col xs={24} md={24} lg={24}>
               {(isAdmin || isEditor) &&
-                <button className='btn btn-edit'
+                <button className='btn btn-info'
                   onClick={() => {
                     setModalDetailVisible(key)
                   }}>

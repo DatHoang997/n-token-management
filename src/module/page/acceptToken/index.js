@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import StandardPage from '../StandardPage'
 import { Row, Col, Input, Popconfirm, Modal } from 'antd'
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import store from '@/store'
 import {useSelector, useDispatch} from "react-redux"
 import TokenService from '@/service/TokenService'
+import EditToken from '../detail/index'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
 import './style.scss'
@@ -12,10 +12,11 @@ import './style.scss'
 const home = () => {
   useAuth()
   useEditor()
-  const tokenRedux = store.getRedux('token').actions,
+        const dispatch = useDispatch(),
+        tokenRedux = store.getRedux('token').actions,
         token = useSelector(state => state.token.listWaitingAccept),
         tokenSearch = useSelector(state => state.token.searchListWaitingAccept),
-        dispatch = useDispatch()
+        [modalDetailVisible, setModalDetailVisible] = useState(false)
 
   const isAdmin = useSelector(state => state.user.isAdmin),
         isEditor = useSelector(state => state.user.isEditor)
@@ -70,6 +71,14 @@ const home = () => {
               }
             </Col>
             <Col xs={24} md={24} lg={24} className="padding-top-xs">
+              <button className='btn btn-info'
+                onClick={() => {
+                  setModalDetailVisible(key)
+                }}>
+                detail
+              </button>
+            </Col>
+            <Col xs={24} md={24} lg={24} className="padding-top-xs">
               <Popconfirm
                 placement="top"
                 title="Delete this token ?"
@@ -79,6 +88,27 @@ const home = () => {
               >
                 <button className='btn btn-delete'>remove</button>
               </Popconfirm>
+              <Modal  title='Token detail'
+                      visible={modalDetailVisible === key}
+                      footer={null}
+                      onCancel={() => setModalDetailVisible(false)}>
+                <EditToken
+                  _id={element._id}
+                  name={element.name}
+                  network={element.network}
+                  symbol={element.symbol}
+                  decimal={element.decimal}
+                  cmcId={element.cmcId}
+                  cgkId={element.cgkId}
+                  apiSymbol={element.apiSymbol}
+                  chainType={element.chainType}
+                  address={element.address}
+                  logo={element.logo}
+                  formatAddress={element.format_address}
+                  segWit={element.segWit}
+                  keys={key}
+                  hideModal={() => setModalDetailVisible(false)}/>
+              </Modal>
             </Col>
           </Row>
         </Col>

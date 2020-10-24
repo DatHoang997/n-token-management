@@ -25,6 +25,7 @@
       background-color: $green_color;
       color: white;
       width: 80px;
+      border-radius: 10px;
 
       &:hover {
         transform: translateY(-2px);
@@ -36,18 +37,18 @@
     }
 
     &-info {
-      padding: 0 5px;
-      line-height: 1.2;
-      margin-left: 3px;
+      padding: 7px 17px;
+      background-color: $primary_color;
+      color: white;
+      width: 80px;
+      border-radius: 10px;
 
       &:hover {
         transform: translateY(-2px);
-        color: $primary_color
       }
 
       &:active {
         transform: translateY(2px);
-        color: $primary_color
       }
     }
 
@@ -172,6 +173,23 @@
       background-color: $green_color;
       color: white;
       width: 80px;
+      border-radius: 10px;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(2px);
+      }
+    }
+
+    &-info {
+      padding: 7px 17px;
+      background-color: $primary_color;
+      color: white;
+      width: 80px;
+      border-radius: 10px;
 
       &:hover {
         transform: translateY(-2px);
@@ -262,7 +280,7 @@
   border: 2px solid hsla(0, 0%, 100%, .57);
   align-items: center;
   margin-bottom: 10px;
-  background: linear-gradient(211deg, #8BC249 , #23A455);
+  background: linear-gradient(211deg, #6986dd, #224099);
 
   &:hover {
     transform: translateY(-1px);

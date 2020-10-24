@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import StandardPage from '../StandardPage'
+import {useDispatch, useSelector} from "react-redux";
 import { Input, Row, Col, Switch, message } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 import TokenService from '@/service/TokenService'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
@@ -22,9 +23,13 @@ const editToken = (props) => {
         [formatAddress, setFormatAddress] = useState(props.formatAddress && props.formatAddress != undefined ? props.formatAddress : ''),
         [keys, setKeys] = useState(props.keys && props.keys != undefined ? props.keys : ''),
         [segWit, setSegWit] = useState(props.segWit && props.segWit != undefined ? props.segWit : ''),
-        [disableSubmit, setDisableSubmit] = useState(false)
+        [disableSubmit, setDisableSubmit] = useState(false),
+        [disableEdit, setDisableEdit] = useState(true)
 
   const tokenService = new TokenService
+
+  const isAdmin = useSelector(state => state.user.isAdmin),
+        isEditor = useSelector(state => state.user.isEditor)
 
   const editToken = async() => {
     setDisableSubmit(true)
@@ -35,6 +40,11 @@ const editToken = (props) => {
     }
   }
 
+  const edit = async() => {
+    if(disableEdit == true) setDisableEdit(false)
+    if(disableEdit == false) setDisableEdit(true)
+  }
+
   const getSegWit = (checked) => {
     setSegWit(checked)
   }
@@ -42,13 +52,22 @@ const editToken = (props) => {
   return (
     <Row>
       <Col span={24}>
+        { isAdmin &&
+          <Row className="right-align">
+            <Col span={24}>
+              <button className="btn-edit margin-top-md" onClick={edit}>
+                <span>Edit</span>
+              </button>
+            </Col>
+          </Row>
+        }
         <Row className="padding-top-page">
           <Col span={1}></Col>
           <Col span={9}>
             <p>Token name:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setName(e.target.value)}} value={name}/>
+            <Input onChange={(e) => {setName(e.target.value)}} value={name} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -57,7 +76,7 @@ const editToken = (props) => {
             <p>Network :</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setNetwork(e.target.value)}} value={network}/>
+            <Input onChange={(e) => {setNetwork(e.target.value)}} value={network} disabled={disableEdit}/>
           </Col>
         </Row>
         { (network == 'bitcoin' || network == 'litecoin' ||network == 'bitcoin-test' ||network == 'litecoin-test') ?
@@ -79,7 +98,7 @@ const editToken = (props) => {
             <p>Symbol:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setSymbol(e.target.value)}} value={symbol}/>
+            <Input onChange={(e) => {setSymbol(e.target.value)}} value={symbol} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -88,7 +107,7 @@ const editToken = (props) => {
             <p>Decimal:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setDecimal(e.target.value)}} value={decimal}/>
+            <Input onChange={(e) => {setDecimal(e.target.value)}} value={decimal} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -97,7 +116,7 @@ const editToken = (props) => {
             <p>CMC Id :</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setCmcId(e.target.value)}} value={cmcId}/>
+            <Input onChange={(e) => {setCmcId(e.target.value)}} value={cmcId} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -106,7 +125,7 @@ const editToken = (props) => {
             <p>CoinGecko Id:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setCgkId(e.target.value)}} value={cgkId}/>
+            <Input onChange={(e) => {setCgkId(e.target.value)}} value={cgkId} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -115,7 +134,7 @@ const editToken = (props) => {
             <p>Api symbol:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setApiSymbol(e.target.value)}} value={apiSymbol}/>
+            <Input onChange={(e) => {setApiSymbol(e.target.value)}} value={apiSymbol} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -124,7 +143,7 @@ const editToken = (props) => {
             <p>Chain type:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setChainType(e.target.value)}} value={chainType}/>
+            <Input onChange={(e) => {setChainType(e.target.value)}} value={chainType} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -133,7 +152,7 @@ const editToken = (props) => {
             <p>address:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setAddress(e.target.value)}} value={address}/>
+            <Input onChange={(e) => {setAddress(e.target.value)}} value={address} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -142,7 +161,7 @@ const editToken = (props) => {
             <p>logo:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setLogo(e.target.value)}} value={logo}/>
+            <Input onChange={(e) => {setLogo(e.target.value)}} value={logo} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
@@ -151,14 +170,15 @@ const editToken = (props) => {
             <p>Format address:</p>
           </Col>
           <Col span={13}>
-            <Input onChange={(e) => {setFormatAddress(e.target.value)}} value={formatAddress}/>
+            <Input onChange={(e) => {setFormatAddress(e.target.value)}} value={formatAddress} disabled={disableEdit}/>
           </Col>
         </Row>
         <Row className="padding-top-md">
           <Col span={10}></Col>
           <Col span={13}>
             <button className="btn-submit margin-top-md" onClick={editToken} disabled={disableSubmit}>
-              <span>Edit</span>
+            {disableSubmit && <span className="margin-right-sm"> <LoadingOutlined/></span>}
+              <span>Submit</span>
             </button>
           </Col>
         </Row>
