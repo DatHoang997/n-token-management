@@ -22,8 +22,6 @@ const home = () => {
 
   const tokenService = new TokenService
 
-  console.log(token)
-
   useEffect(() => {
     tokenService.getWaitingToken()
   }, [])

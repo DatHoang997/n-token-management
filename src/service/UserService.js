@@ -47,11 +47,9 @@ export default class extends BaseService {
 
   async login() {
     await setupWeb3()
-    console.log('login')
     const storeUser = this.store.getState().user
     const wallet = storeUser.wallet
     const web3 = new Web3(window.ethereum)
-    console.log(wallet)
     if ((web3.currentProvider.networkVersion && web3.currentProvider.networkVersion != NetIds.production) ||
       (web3.currentProvider.net_version && web3.currentProvider.net_version() && web3.currentProvider.net_version() != NetIds.production)
     ) {
@@ -59,7 +57,6 @@ export default class extends BaseService {
     }
 
     try {
-      console.log('try')
       var message = new Date().getTime() + '.' + wallet + '.ezDeFi.token'
       var signature = await web3.eth.personal.sign(message, wallet)
     } catch (e) {
@@ -81,7 +78,6 @@ export default class extends BaseService {
   async verifyToken() {
     try {
       var response = await axios.post(API.VERIFY_TOKEN)
-      console.log(response)
       return response.data.data
     } catch (e) {
       return false
@@ -92,8 +88,6 @@ export default class extends BaseService {
     const that = this
     const userRedux = this.store.getRedux('user')
     var response = await axios.get(API.CHECK_ADMIN)
-    console.log(response)
-    console.log(response.data.data)
     if (response.data.data) {
       that.dispatch(userRedux.actions.isAdmin_update(true))
     }
@@ -104,7 +98,6 @@ export default class extends BaseService {
     const that = this
     const userRedux = this.store.getRedux('user')
     var response = await axios.get(API.CHECK_EDITOR)
-    console.log('@@@@@@@@@@@@@',response.data)
     if (response.data.data) {
       that.dispatch(userRedux.actions.isEditor_update(true))
     }

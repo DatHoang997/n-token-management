@@ -46,7 +46,6 @@ async function getNonce (_address) {
 }
 
 async function absorb(nonce, _orderType, _targetSTB) {
-  console.log('absorb', _orderType, _targetSTB)
   let contractAddress = Seigniorage._address
   let methods = Seigniorage.methods
   let toDeposit = 0
@@ -60,7 +59,6 @@ async function absorb(nonce, _orderType, _targetSTB) {
     'nonce': web3.utils.toHex(nonce)
   }
 
-  console.log(rawTransaction)
   let transaction = new Tx(rawTransaction);
   // signing transaction with private key
   transaction.sign(privateKey)

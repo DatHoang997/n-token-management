@@ -21,10 +21,7 @@ const home = () => {
         isEditor = useSelector(state => state.user.isEditor),
         [modalDetailVisible, setModalDetailVisible] = useState(false)
 
-  const tokenService = new TokenService,
-        userService = new UserService
-
-  console.log(token)
+  const tokenService = new TokenService
 
   const searchToken = (e) => {
     const items = Object.values(token).filter((data) => {

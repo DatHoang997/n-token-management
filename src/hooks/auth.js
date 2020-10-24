@@ -14,7 +14,6 @@ export function useAuth () {
   useEffect(() => {
     async function verifyToken() {
       let data = await userService.verifyToken()
-      console.log('TTTTTTTTTTTTTTTT', data)
       if (data) {
         store.dispatch(userRedux.actions.username_update(data.username))
       }
@@ -40,7 +39,6 @@ export function useAdmin () {
   useEffect(() => {
     async function verifyAdmin() {
       let data = await userService.checkAdmin()
-      console.log('lololo1111111111111111111111', data)
       if (data) {
         store.dispatch(userRedux.actions.isAdmin_update(true))
       }
@@ -62,7 +60,6 @@ export function useEditor () {
     async function verifyAdmin() {
       let data = await userService.checkEditor()
       let data1 = await userService.checkAdmin()
-      console.log('lololo22222222222222222', data)
       if (data || data1) {
         store.dispatch(userRedux.actions.isEditor_update(true))
         store.dispatch(userRedux.actions.isEditor_update(true))

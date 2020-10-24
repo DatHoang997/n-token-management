@@ -38,13 +38,10 @@ export default class extends BaseService {
       )
       let listToken = that.store.getState().token.listToken
       let searchListToken = that.store.getState().token.searchListToken
-      console.log('listToken', listToken)
       that.dispatch(tokenRedux.actions.listToken_update(listToken))
       that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
-      console.log('response', response)
       return response;
     } catch (error) {
-      console.log(error)
       return error;
     }
   }
@@ -55,7 +52,6 @@ export default class extends BaseService {
     axios.get(API.GET_ACCEPTED_TOKEN)
       .then(function (response) {
         var data = response.data.data
-        console.log(data)
         that.dispatch(tokenRedux.actions.listToken_update(data))
         that.dispatch(tokenRedux.actions.searchListToken_update(data))
       })
@@ -67,7 +63,6 @@ export default class extends BaseService {
     axios.get(API.GET_WAITING_TOKEN)
       .then(function (response) {
         var data = response.data.data
-        console.log(data)
         that.dispatch(tokenRedux.actions.listWaitingAccept_update(data))
         that.dispatch(tokenRedux.actions.searchListWaitingAccept_update(data))
       })
@@ -78,15 +73,12 @@ export default class extends BaseService {
     let that = this
     const tokenRedux = this.store.getRedux('token')
     if (_id) {
-      console.log('in')
-      console.log(_id)
       await axios.delete(API.DELETE_TOKEN + _id)
       .then(function (response) {
         let listToken = that.store.getState().token.listToken
         let searchListToken = that.store.getState().token.searchListToken
         delete listToken[key]
         delete searchListToken[key]
-        console.log(searchListToken)
         that.dispatch(tokenRedux.actions.listToken_update(listToken))
         that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
         return response;
@@ -149,13 +141,10 @@ export default class extends BaseService {
         format_address: formatAddress,
         segWit: segWit,
       }
-      console.log(searchListToken)
       that.dispatch(tokenRedux.actions.listToken_update(listToken))
       that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
-      console.log('response', response)
       return response;
     } catch (error) {
-      console.log(error)
       return error;
     }
   }
@@ -174,7 +163,6 @@ export default class extends BaseService {
       let searchListWaitingAccept = that.store.getState().token.searchListWaitingAccept
       delete listWaitingAccept[key]
       delete searchListWaitingAccept[key]
-      console.log(response)
       that.dispatch(tokenRedux.actions.listWaitingAccept_update(listWaitingAccept))
       that.dispatch(tokenRedux.actions.searchListWaitingAccept_update(searchListWaitingAccept))
       return response
@@ -191,7 +179,6 @@ export default class extends BaseService {
           headers: {"Content-Type": "multipart/form-data"}
         }
       )
-      console.log(response)
       return response;
     } catch (error) {
       return error.response.data;

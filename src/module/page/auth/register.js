@@ -45,7 +45,6 @@ export default (props) => {
     let response = await userService.register(username)
     setUsernameErr('')
     setEmailErr('')
-    console.log(response)
     if (response.status === 0) {
       for (let i in response.data) {
         if (response.data[i].param === 'username') setUsernameErr(response.data[i].msg)
@@ -54,7 +53,7 @@ export default (props) => {
       if (!response.data) message.error('something_error')
     } else if (response.status === 1) {
       localStorage.setItem('jwt', response.data.token)
-      message.success('register_successful')
+      message.success('Register successful')
       history.push('/')
     }
     setRegistering(false)
@@ -90,7 +89,7 @@ export default (props) => {
             {registering && <span className="margin-right-sm"><LoadingOutlined/></span>}
             register
           </button>
-          <Link className="link-register" to="/login"> go_login</Link>
+          <Link className="link-register" to="/login"> Go login</Link>
         </div>
       </div>
     </div>

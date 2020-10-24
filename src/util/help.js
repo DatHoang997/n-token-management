@@ -221,7 +221,6 @@ export async function callPocHome(web3, tx) {
   if (tx.to && tx.to != PocHomeAddress) {
     throw "tx.to must be undefined or " + PocHomeAddress;
   }
-  // console.log("tx:", _.clone(tx));
   tx.to = PocHomeAddress;
   if (!tx.gasLimit) {
     const block = await web3.eth.getBlock('latest');
@@ -248,7 +247,7 @@ export async function callPocHome(web3, tx) {
 
 export async function sendPocHome(web3, tx) {
   await callPocHome(web3, tx);
-  console.log("tx sent:", tx);
+  log("tx sent:", tx);
   return web3.eth.sendTransaction(tx);
 }
 

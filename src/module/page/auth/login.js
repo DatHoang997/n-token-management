@@ -46,7 +46,7 @@ export default () => {
   return (
     <div className="login-background">
       <div className="login-logo-box">
-        {/* <img className='logo-img' src="../../../assets/images/POC2.svg" alt=""/> */}
+        <img className='logo-img' src="../../../assets/images/ezdefi.svg" alt=""/>
       </div>
       <div className="login-box">
         <div className="login-box--header">
@@ -58,8 +58,8 @@ export default () => {
             login
           </button>
           {errorMsg && <p className="center text-red">{errorMsg}</p>}
-          <p className="login__dont-have-acc">dont_have_acc</p>
-          <Link to="/register" className="link-register">go_register</Link>
+          <p className="login__dont-have-acc">Don't have account?</p>
+          <Link to="/register" className="link-register">Go register</Link>
         </div>
       </div>
     </div>
