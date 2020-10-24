@@ -3,3 +3,24 @@
 .token-table {
   border-bottom: 1px solid $light_gray_2;
 }
+
+@media only screen and (max-width: 992px) {
+  .token-logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .token-logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .token-logo {
+    width: 60px;
+    height: 60px;
+  }
+}

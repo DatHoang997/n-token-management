@@ -9,6 +9,8 @@ class tokenRedux extends BaseRedux {
     return {
       listToken: [],
       searchListToken: [],
+      listWaitingAccept: [],
+      searchListWaitingAccept : [],
     }
   }
 }

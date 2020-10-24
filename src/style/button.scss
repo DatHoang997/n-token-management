@@ -1,14 +1,30 @@
 @media only screen and (min-width: 992px) {
   .btn {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 12px;
-    padding: 5px 10px;
+    padding: 7px 10px;
     border-radius: 10px;
 
+    &-accept {
+      padding: 7px 12px;
+      width: 80px;
+      color: white;
+      background-color: $green_color;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(2px);
+      }
+    }
+
     &-edit {
-      padding: 5px 17px;
+      padding: 7px 17px;
       background-color: $green_color;
       color: white;
+      width: 80px;
 
       &:hover {
         transform: translateY(-2px);
@@ -63,6 +79,7 @@
     &-delete {
       color: white;
       background-color: $red_color;
+      width: 80px;
 
       &:hover {
         transform: translateY(-2px);
@@ -76,6 +93,7 @@
     &-detail {
       color: $gray;
       background-color: $light_gray;
+      width: 80px;
 
       &:hover {
         transform: translateY(-2px);
@@ -129,56 +147,31 @@
 
 @media only screen and (max-width: 992px) {
   .btn {
-    font-size: 12px;
     line-height: 12px;
-    padding: 5px 10px;
+    padding: 7px 10px;
     border-radius: 10px;
+    font-size: 15px;
+
+    &-accept {
+      padding: 7px 12px;
+      width: 80px;
+      color: white;
+      background-color: $green_color;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(2px);
+      }
+    }
 
     &-edit {
-      padding: 5px 17px;
+      padding: 7px 17px;
       background-color: $green_color;
       color: white;
-
-      &:hover {
-        transform: translateY(-2px);
-      }
-
-      &:active {
-        transform: translateY(2px);
-      }
-    }
-
-    &-info {
-      padding: 0 5px;
-      line-height: 1.2;
-      margin-left: 3px;
-
-      &:hover {
-        transform: translateY(-2px);
-        color: $primary_green
-      }
-
-      &:active {
-        transform: translateY(2px);
-        color: $primary_green
-      }
-    }
-
-    &-large {
-      padding-left: 30px;
-      padding-right: 30px;
-
-      &:hover {
-        transform: translateY(-2px);
-      }
-
-      &:active {
-        transform: translateY(2px);
-      }
-    }
-
-    &-white {
-      border: 1px solid $gray;
+      width: 80px;
 
       &:hover {
         transform: translateY(-2px);
@@ -192,6 +185,7 @@
     &-delete {
       color: white;
       background-color: $red_color;
+      width: 80px;
 
       &:hover {
         transform: translateY(-2px);
@@ -262,7 +256,7 @@
   border-radius: 30px;
   font-size: 18px;
   font-weight: bold;
-  padding: 5px 80px;
+  padding: 7px 80px;
   -webkit-transition: all .3s;
   transition: all .3s;
   border: 2px solid hsla(0, 0%, 100%, .57);

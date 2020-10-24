@@ -5,26 +5,28 @@ import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import store from '@/store'
 import {useSelector, useDispatch} from "react-redux"
 import TokenService from '@/service/TokenService'
-import UserService from '@/service/UserService'
-import EditToken from '../detail/index'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
 import './style.scss'
 
 const home = () => {
   useAuth()
-  const dispatch = useDispatch(),
-        tokenRedux = store.getRedux('token').actions,
-        token = useSelector(state => state.token.listToken),
-        tokenSearch = useSelector(state => state.token.searchListToken),
-        isAdmin = useSelector(state => state.user.isAdmin),
-        isEditor = useSelector(state => state.user.isEditor),
-        [modalDetailVisible, setModalDetailVisible] = useState(false)
+  useEditor()
+  const tokenRedux = store.getRedux('token').actions,
+        token = useSelector(state => state.token.listWaitingAccept),
+        tokenSearch = useSelector(state => state.token.searchListWaitingAccept),
+        dispatch = useDispatch()
 
-  const tokenService = new TokenService,
-        userService = new UserService
+  const isAdmin = useSelector(state => state.user.isAdmin),
+        isEditor = useSelector(state => state.user.isEditor)
+
+  const tokenService = new TokenService
 
   console.log(token)
+
+  useEffect(() => {
+    tokenService.getWaitingToken()
+  }, [])
 
   const searchToken = (e) => {
     const items = Object.values(token).filter((data) => {
@@ -60,48 +62,25 @@ const home = () => {
         <Col xs={5} md={5} lg={5}>
           <Row className="right-align">
             <Col xs={24} md={24} lg={24}>
-              {(isAdmin || isEditor) &&
-                <button className='btn btn-edit'
-                  onClick={() => {
-                    setModalDetailVisible(key)
-                  }}>
-                  detail
+              {(isAdmin) &&
+                <button className='btn btn-accept'
+                onClick={() => {
+                  tokenService.acceptToken(element._id, key)
+                }}>
+                  accept
                 </button>
               }
             </Col>
             <Col xs={24} md={24} lg={24} className="padding-top-xs">
-              {(isAdmin || isEditor) &&
-                <Popconfirm
-                  placement="top"
-                  title="Delete this token ?"
-                  onConfirm={() => tokenService.deleteToken(element._id, key)}
-                  okText="yes"
-                  cancelText="no"
-                >
-                  <button className='btn btn-delete'>remove</button>
-                </Popconfirm>
-              }
-              <Modal  title='Token detail'
-                      visible={modalDetailVisible === key}
-                      footer={null}
-                      onCancel={() => setModalDetailVisible(false)}>
-                <EditToken
-                  _id={element._id}
-                  name={element.name}
-                  network={element.network}
-                  symbol={element.symbol}
-                  decimal={element.decimal}
-                  cmcId={element.cmcId}
-                  cgkId={element.cgkId}
-                  apiSymbol={element.apiSymbol}
-                  chainType={element.chainType}
-                  address={element.address}
-                  logo={element.logo}
-                  formatAddress={element.format_address}
-                  segWit={element.segWit}
-                  keys={key}
-                  hideModal={() => setModalDetailVisible(false)}/>
-              </Modal>
+              <Popconfirm
+                placement="top"
+                title="Delete this token ?"
+                onConfirm={() => tokenService.deleteToken(element._id, key)}
+                okText="yes"
+                cancelText="no"
+              >
+                <button className='btn btn-delete'>remove</button>
+              </Popconfirm>
             </Col>
           </Row>
         </Col>

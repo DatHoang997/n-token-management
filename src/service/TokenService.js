@@ -7,6 +7,10 @@ const API = {
   POST_SAVE_TOKEN : API_URL + '/token/save_token/',
   GET_TOKEN : API_URL + '/token/get_token/',
   PUT_EDIT_TOKEN : API_URL + '/token/edit_token/',
+  GET_WAITING_TOKEN : API_URL + '/token/get_waiting_token/',
+  ACCEPT_TOKEN : API_URL + '/token/accept_token/',
+  GET_ACCEPTED_TOKEN : API_URL + '/token/get_accepted_token/',
+  DELETE_TOKEN : API_URL + '/token/delete_token/',
 }
 
 export default class extends BaseService {
@@ -27,19 +31,18 @@ export default class extends BaseService {
     formData.append("format_address", formatAddress)
     formData.append("segWit", segWit)
     try {
-       await axios.post(API.POST_SAVE_TOKEN, formData,
+      let response = await axios.post(API.POST_SAVE_TOKEN, formData,
         {
           headers: {"Content-Type": "multipart/form-data"}
         }
-      ).then (function (response) {
-        let listToken = that.store.getState().token.listToken
-        let searchListToken = that.store.getState().token.searchListToken
-        console.log('listToken', listToken)
-        that.dispatch(tokenRedux.actions.listToken_update(listToken))
-        that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
-        console.log('response', response)
-        return response;
-      })
+      )
+      let listToken = that.store.getState().token.listToken
+      let searchListToken = that.store.getState().token.searchListToken
+      console.log('listToken', listToken)
+      that.dispatch(tokenRedux.actions.listToken_update(listToken))
+      that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
+      console.log('response', response)
+      return response;
     } catch (error) {
       console.log(error)
       return error;
@@ -49,7 +52,7 @@ export default class extends BaseService {
   async getToken () {
     const that = this
     const tokenRedux = this.store.getRedux('token')
-    axios.get(API.GET_TOKEN)
+    axios.get(API.GET_ACCEPTED_TOKEN)
       .then(function (response) {
         var data = response.data.data
         console.log(data)
@@ -58,11 +61,25 @@ export default class extends BaseService {
       })
   }
 
+  async getWaitingToken () {
+    const that = this
+    const tokenRedux = this.store.getRedux('token')
+    axios.get(API.GET_WAITING_TOKEN)
+      .then(function (response) {
+        var data = response.data.data
+        console.log(data)
+        that.dispatch(tokenRedux.actions.listWaitingAccept_update(data))
+        that.dispatch(tokenRedux.actions.searchListWaitingAccept_update(data))
+      })
+  }
+
+
   async deleteToken (_id, key) {
     let that = this
     const tokenRedux = this.store.getRedux('token')
     if (_id) {
       console.log('in')
+      console.log(_id)
       await axios.delete(API.DELETE_TOKEN + _id)
       .then(function (response) {
         let listToken = that.store.getState().token.listToken
@@ -97,68 +114,71 @@ export default class extends BaseService {
     formData.append("format_address", formatAddress)
     formData.append("segWit", segWit)
     try {
-      await axios.put(API.PUT_EDIT_TOKEN, formData,
+      let response = await axios.put(API.PUT_EDIT_TOKEN, formData,
         {
           headers: {"Content-Type": "multipart/form-data"}
         }
-      ).then(function (response) {
-        let listToken = that.store.getState().token.listToken
-        let searchListToken = that.store.getState().token.searchListToken
-        listToken[key] = {
-          name: name,
-          network: network,
-          symbol: symbol,
-          decimal: decimal,
-          cmcIdL: cmcID,
-          cgkId: cgkId,
-          apiSymbol: apiSymbol,
-          chainType: chainType,
-          address: address,
-          logo: logo,
-          format_address: formatAddress,
-          segWit: segWit,
-        }
-        searchListToken[key] = {
-          name: name,
-          network: network,
-          symbol: symbol,
-          decimal: decimal,
-          cmcIdL: cmcID,
-          cgkId: cgkId,
-          apiSymbol: apiSymbol,
-          chainType: chainType,
-          address: address,
-          logo: logo,
-          format_address: formatAddress,
-          segWit: segWit,
-        }
-        console.log(searchListToken)
-        that.dispatch(tokenRedux.actions.listToken_update(listToken))
-        that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
-        console.log('response', response)
-        return response;
-      })
+      )
+      let listToken = that.store.getState().token.listToken
+      let searchListToken = that.store.getState().token.searchListToken
+      listToken[key] = {
+        name: name,
+        network: network,
+        symbol: symbol,
+        decimal: decimal,
+        cmcIdL: cmcID,
+        cgkId: cgkId,
+        apiSymbol: apiSymbol,
+        chainType: chainType,
+        address: address,
+        logo: logo,
+        format_address: formatAddress,
+        segWit: segWit,
+      }
+      searchListToken[key] = {
+        name: name,
+        network: network,
+        symbol: symbol,
+        decimal: decimal,
+        cmcIdL: cmcID,
+        cgkId: cgkId,
+        apiSymbol: apiSymbol,
+        chainType: chainType,
+        address: address,
+        logo: logo,
+        format_address: formatAddress,
+        segWit: segWit,
+      }
+      console.log(searchListToken)
+      that.dispatch(tokenRedux.actions.listToken_update(listToken))
+      that.dispatch(tokenRedux.actions.searchListToken_update(searchListToken))
+      console.log('response', response)
+      return response;
     } catch (error) {
       console.log(error)
       return error;
     }
   }
 
-  async PocPriceUSD () {
+  async acceptToken (_id, key) {
     let that = this
-    const pocStatsRedux = this.store.getRedux('pocStats')
-    axios.get(API.USD_POC_PRICE)
-      .then(function (response) {
-        var data = response.data.data.price
-        if (data != 0) {
-          let dot = data.indexOf('.')
-          let dataLength = data.slice(0, dot).length
-          let float = parseFloat(data).toPrecision(dataLength+2).toString()
-          that.dispatch(pocStatsRedux.actions.pocPriceUSD_update(thousands(float, 2)))
-        } else {
-          that.dispatch(pocStatsRedux.actions.pocPriceUSD_update('0'))
-        }
-      })
+    const tokenRedux = this.store.getRedux('token')
+    let formData = new FormData()
+    formData.append("_id", _id)
+    axios.put(API.ACCEPT_TOKEN, formData,
+      {
+        headers: {"Content-Type": "multipart/form-data"}
+      }
+    ).then(function (response) {
+      let listWaitingAccept = that.store.getState().token.listWaitingAccept
+      let searchListWaitingAccept = that.store.getState().token.searchListWaitingAccept
+      delete listWaitingAccept[key]
+      delete searchListWaitingAccept[key]
+      console.log(response)
+      that.dispatch(tokenRedux.actions.listWaitingAccept_update(listWaitingAccept))
+      that.dispatch(tokenRedux.actions.searchListWaitingAccept_update(searchListWaitingAccept))
+      return response
+    })
   }
 
   async setRole(role, wallet) {

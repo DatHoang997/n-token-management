@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import StandardPage from '../StandardPage'
-import { Input, Row, Col, Switch } from 'antd'
+import { Input, Row, Col, Switch, message } from 'antd'
 import TokenService from '@/service/TokenService'
+import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
 import './style.scss'
 
-const stats = () => {
+const newToken = () => {
+  useAuth()
+  useEditor()
   const [name, setName] = useState(''),
         [network, setNetwork] = useState(''),
         [symbol, setSymbol] = useState(''),
@@ -24,7 +27,24 @@ const stats = () => {
 
   const saveToken = async() => {
     setDisableSubmit(true)
-    tokenService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit)
+    let response = await tokenService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit)
+    console.log(response)
+    if (response) {
+      setDisableSubmit(false)
+      message.success('Add Token success!')
+      setName('')
+      setNetwork('')
+      setSymbol('')
+      setDecimal('')
+      setCmcId('')
+      setCgkId('')
+      setApiSymbol('')
+      setChainType('')
+      setAddress('')
+      setLogo('')
+      setFormatAddress('')
+      setSegWit('')
+    }
   }
 
   const getSegWit = (checked) => {
@@ -153,9 +173,7 @@ const stats = () => {
       <Row className="padding-top-md">
         <Col span={10}></Col>
         <Col span={13}>
-          <button className="btn-submit margin-top-md" onClick={saveToken} 
-          // disabled={disableSubmit}
-          >
+          <button className="btn-submit margin-top-md" onClick={saveToken}>
             <span>Add new Token</span>
           </button>
         </Col>
@@ -164,4 +182,4 @@ const stats = () => {
   )
 }
 
-export default stats;
+export default newToken;

@@ -15,13 +15,7 @@ const resolve = util.resolve;
 const prodEnv = {
   NODE_ENV: JSON.stringify('production'),
   PLATFORM_ENV: JSON.stringify('web'),
-  SERVER_URL: JSON.stringify('https://api.poc.me/api')
-};
-
-const stagingEnv = {
-  NODE_ENV: JSON.stringify('staging'),
-  PLATFORM_ENV: JSON.stringify('web'),
-  SERVER_URL: JSON.stringify('https://staging-server.com/api')
+  SERVER_URL: JSON.stringify('https://')
 };
 
 const cssFilename_lib = 'static/css/lib.css?[hash:8]';
