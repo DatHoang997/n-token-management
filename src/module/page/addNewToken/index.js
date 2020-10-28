@@ -66,6 +66,9 @@ const newToken = () => {
 
   const handleChange = (e) => {
     setNetwork(e)
+    if(e == 'bitcoin' || e == 'litecoin' || e == 'bitcoin-test' || e == 'litecoin-test') {
+      setSegWit(false)
+    }
   }
 
   return (
@@ -99,7 +102,7 @@ const newToken = () => {
           </Select>
         </Col>
       </Row>
-      { (network == 'bitcoin' || network == 'litecoin' ||network == 'bitcoin-test' ||network == 'litecoin-test') ?
+      { (network == 'bitcoin' || network == 'litecoin' || network == 'bitcoin-test' || network == 'litecoin-test') ?
         <Row className="padding-top-md">
           <Col xs={1} sm={1} lg={1}></Col>
           <Col xs={9} sm={9} lg={6}>

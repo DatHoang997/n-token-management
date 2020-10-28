@@ -4,17 +4,17 @@ import {thousands} from '@/util/help.js'
 
 let API_URL = process.env.SERVER_URL
 const API = {
-  POST_SAVE_TOKEN : API_URL + '/token/save_token/',
-  GET_TOKEN : API_URL + '/token/get_token/',
-  PUT_EDIT_TOKEN : API_URL + '/token/edit_token/',
-  GET_WAITING_TOKEN : API_URL + '/token/get_waiting_token/',
-  ACCEPT_TOKEN : API_URL + '/token/accept_token/',
-  GET_ACCEPTED_TOKEN : API_URL + '/token/get_accepted_token/',
-  DELETE_TOKEN : API_URL + '/token/delete_token/',
-  POST_SAVE_NETWORK : API_URL + '/token/save_Network/',
-  GET_NETWORK : API_URL + '/token/get_network/',
-  PUT_EDIT_NETWORK : API_URL + '/token/edit_Network/',
-  DELETE_NETWORK : API_URL + '/token/delete_network/',
+  POST_SAVE_TOKEN : "http://192.168.1.88:3030/api" + '/token/save_token/',
+  GET_TOKEN : "http://192.168.1.88:3030/api" + '/token/get_token/',
+  PUT_EDIT_TOKEN : "http://192.168.1.88:3030/api" + '/token/edit_token/',
+  GET_WAITING_TOKEN : "http://192.168.1.88:3030/api" + '/token/get_waiting_token/',
+  ACCEPT_TOKEN : "http://192.168.1.88:3030/api" + '/token/accept_token/',
+  GET_ACCEPTED_TOKEN : "http://192.168.1.88:3030/api" + '/token/get_accepted_token/',
+  DELETE_TOKEN : "http://192.168.1.88:3030/api" + '/token/delete_token/',
+  POST_SAVE_NETWORK : "http://192.168.1.88:3030/api" + '/token/save_Network/',
+  GET_NETWORK : "http://192.168.1.88:3030/api" + '/token/get_network/',
+  PUT_EDIT_NETWORK : "http://192.168.1.88:3030/api" + '/token/edit_Network/',
+  DELETE_NETWORK : "http://192.168.1.88:3030/api" + '/token/delete_network/',
 }
 
 export default class extends BaseService {
@@ -31,7 +31,8 @@ export default class extends BaseService {
     formData.append("address", address)
     formData.append("logo", logo)
     formData.append("format_address", formatAddress)
-    if (segWit) {
+    console.log(segWit)
+    if (segWit == true || segWit == false) {
       formData.append("segWit", segWit)
     }
     try {

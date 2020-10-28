@@ -6,11 +6,11 @@ import {NetIds}    from "../constant";
 
 let API_URL = process.env.SERVER_URL
 const API = {
-  REGISTER : API_URL + '/auth/register',
-  LOGIN : API_URL + '/auth/login',
-  VERIFY_TOKEN : API_URL + '/auth/verify-token/',
-  CHECK_ADMIN : API_URL + '/auth/check-admin/',
-  CHECK_EDITOR : API_URL + '/auth/check-editor/',
+  REGISTER : "http://192.168.1.88:3030/api" + '/auth/register',
+  LOGIN : "http://192.168.1.88:3030/api" + '/auth/login',
+  VERIFY_TOKEN : "http://192.168.1.88:3030/api" + '/auth/verify-token/',
+  CHECK_ADMIN : "http://192.168.1.88:3030/api" + '/auth/check-admin/',
+  CHECK_EDITOR : "http://192.168.1.88:3030/api" + '/auth/check-editor/',
 }
 
 export default class extends BaseService {
