@@ -50,7 +50,7 @@ export default () => {
       </div>
       <div className="login-box">
         <div className="login-box--header">
-          <h3 className="center hide-on-desktop">('login')</h3>
+          <h3 className="center hide-on-desktop">Login</h3>
         </div>
         <div className="login-box--body">
           <button className="login-button" onClick={login}>

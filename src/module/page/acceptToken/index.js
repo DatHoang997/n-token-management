@@ -16,16 +16,23 @@ const home = () => {
         tokenRedux = store.getRedux('token').actions,
         token = useSelector(state => state.token.listWaitingAccept),
         tokenSearch = useSelector(state => state.token.searchListWaitingAccept),
+        successResponse = useSelector(state => state.token.response),
         [modalDetailVisible, setModalDetailVisible] = useState(false)
 
-  const isAdmin = useSelector(state => state.user.isAdmin),
-        isEditor = useSelector(state => state.user.isEditor)
+  const isAdmin = useSelector(state => state.user.isAdmin)
 
   const tokenService = new TokenService
 
   useEffect(() => {
     tokenService.getWaitingToken()
   }, [])
+
+  useEffect(() => {
+    if (successResponse == true) {
+      setModalDetailVisible(false)
+      setModalDetailVisible('')
+    }
+  }, [successResponse])
 
   const searchToken = (e) => {
     const items = Object.values(token).filter((data) => {
@@ -35,13 +42,17 @@ const home = () => {
       else if (data.name.toLowerCase().includes(e.target.value.toLowerCase())) {
         return data
       }
+      else if (data.network.toLowerCase().includes(e.target.value.toLowerCase())) {
+        return data
+      }
     })
     dispatch(tokenRedux.searchListToken_update(''))
     dispatch(tokenRedux.searchListToken_update(items))
   }
 
   const tokens = Object.values(tokenSearch).map((element, key) => {
-    let link = "https://etherscan.io/address/" + element.address
+    console.log(element)
+    let link = element.explorer
     return (
       <Row className="margin-top-md token-table padding-top-xs" key={key}>
         <Col xs={1} md={1} lg={1} className="center">{key + 1}</Col>
@@ -55,7 +66,7 @@ const home = () => {
             <Col xs={10} md={8} lg={4}>Network: </Col>
             <Col xs={14} md={16} lg={20}>{element.network}</Col>
             <Col xs={10} md={8} lg={4}>Address: </Col>
-            <Col xs={14} md={16} lg={20}><a href={link} target="_blank">{element.address}</a></Col>
+            <Col xs={14} md={16} lg={20}><a href={'https://ezdefi.com/'} target="_blank">{element.address}</a></Col>
           </Row>
         </Col>
         <Col xs={5} md={5} lg={5}>
@@ -82,7 +93,7 @@ const home = () => {
               <Popconfirm
                 placement="top"
                 title="Delete this token ?"
-                onConfirm={() => tokenService.deleteToken(element._id, key)}
+                onConfirm={() => tokenService.deleteToken(element._id, key, 'accept')}
                 okText="yes"
                 cancelText="no"
               >
@@ -107,6 +118,7 @@ const home = () => {
                   formatAddress={element.format_address}
                   segWit={element.segWit}
                   keys={key}
+                  type="accept"
                   hideModal={() => setModalDetailVisible(false)}/>
               </Modal>
             </Col>

@@ -15,24 +15,9 @@ export default (props) => {
   const wallet                                = useSelector(state => state.user.wallet),
         userService                           = new UserService(),
         [username, setUsername]               = useState(''),
-        [email, setEmail]                     = useState(''),
         [usernameErr, setUsernameErr]         = useState(''),
         [emailErr, setEmailErr]               = useState(''),
-        [registering, setRegistering]         = useState(false),
-        [userRef, setUserRef]                 = useState(''),
-        [userRefErr, setUserRefErr]           = useState('')
-
-
-  const getRefBy = () => {
-    let cookies = getAllCookie()
-    if (cookies._ezdnewref && cookies._ezdnewref.length >= 4) {
-      return cookies._ezdnewref
-    } else if (cookies._ezdref && cookies._ezdref.length >= 4) {
-      return cookies._ezdref
-    } else {
-      return null
-    }
-  }
+        [registering, setRegistering]         = useState(false)
 
   useEffect(() => {
     if (window.ethereum) {
@@ -56,13 +41,12 @@ export default (props) => {
       message.success('Register successful')
       history.push('/')
     }
-    setRegistering(false)
   }
 
   return (
     <div className="register-background">
       <div className="register-logo-box">
-        <img className='logo-img' src="../../../assets/images/POC2.svg" alt=""/>
+        <img className='logo-img' src="../../../assets/images/ezdefi.svg" alt=""/>
       </div>
       <div className="register-box">
         <div className="register-box--header">
@@ -74,14 +58,6 @@ export default (props) => {
                    value={username} onChange={(e) => setUsername(e.target.value)}/>
             {usernameErr && <p className="text-red center">{usernameErr}</p>}
           </div>
-          {
-            !getRefBy() &&
-            <div className="register-input">
-              <Input style={{border: userRefErr && '1px solid red'}} size="large" placeholder='user_referral'
-                     value={userRef} onChange={(e) => setUserRef(e.target.value)}/>
-              {userRefErr && <p className="text-red center">{userRefErr}</p>}
-            </div>
-          }
           <p className="register-description login__dont-have-acc center">
             {wallet && wallet.slice(0, 5) + '...' + wallet.slice(-5) + ' '}
           </p>

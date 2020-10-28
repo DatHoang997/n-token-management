@@ -11,6 +11,9 @@ class tokenRedux extends BaseRedux {
       searchListToken: [],
       listWaitingAccept: [],
       searchListWaitingAccept : [],
+      listNetWork: [],
+      searchListNetWork: [],
+      response : false,
     }
   }
 }

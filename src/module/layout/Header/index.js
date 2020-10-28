@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col, Menu } from 'antd'
 import {useSelector, useDispatch} from "react-redux"
-import { PlusCircleOutlined, HomeOutlined, CheckCircleOutlined, LogoutOutlined } from '@ant-design/icons'
+import { PlusCircleOutlined, HomeOutlined, CheckCircleOutlined, LogoutOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import {Link, useParams, useLocation, useHistory} from "react-router-dom";
 import TokenService from '@/service/TokenService'
 import UserService from '@/service/UserService'
 import './style.scss'
 import 'antd/dist/antd.css';
-
-const { SubMenu } = Menu;
 
 const HeaderComponent = () => {
   const history = useHistory()
@@ -23,6 +21,7 @@ const HeaderComponent = () => {
     tokenService.getToken()
     userService.checkAdmin()
     userService.checkEditor()
+    tokenService.getNetwork()
   }, [])
 
   const logout = () => {
@@ -37,7 +36,7 @@ const HeaderComponent = () => {
       </Menu.Item>
       {(isAdmin || isEditor) &&
         <Menu.Item key="2" icon={<PlusCircleOutlined />}>
-          <Link to="/new">Add new Token</Link>
+          <Link to="/newToken">Add new Token</Link>
         </Menu.Item>
       }
       {(isAdmin || isEditor) &&
@@ -45,7 +44,15 @@ const HeaderComponent = () => {
           <Link to="/accept">Accept Token</Link>
         </Menu.Item>
       }
-      <Menu.Item key="4" icon={<LogoutOutlined />} onClick={() => logout()}>
+      {(isAdmin) &&
+        <Menu.Item key="4" icon={<PlusCircleOutlined />}>
+          <Link to="/newNetwork">Add new Network</Link>
+        </Menu.Item>
+      }
+      <Menu.Item key="5" icon={<UnorderedListOutlined />}>
+        <Link to="/networkList">Network list</Link>
+      </Menu.Item>
+      <Menu.Item key="6" icon={<LogoutOutlined />} onClick={() => logout()}>
         <span>logout</span>
       </Menu.Item>
     </Menu>
