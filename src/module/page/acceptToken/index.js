@@ -51,7 +51,6 @@ const home = () => {
   }
 
   const tokens = Object.values(tokenSearch).map((element, key) => {
-    console.log(element)
     let link = element.explorer
     return (
       <Row className="margin-top-md token-table padding-top-xs" key={key}>

@@ -31,7 +31,6 @@ export default class extends BaseService {
     formData.append("address", address)
     formData.append("logo", logo)
     formData.append("format_address", formatAddress)
-    console.log(segWit)
     if (segWit == true || segWit == false) {
       formData.append("segWit", segWit)
     }
@@ -47,7 +46,6 @@ export default class extends BaseService {
         return false
       }
     } catch (error) {
-      console.log(error)
       return error;
     }
   }

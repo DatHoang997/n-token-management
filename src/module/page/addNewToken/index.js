@@ -39,7 +39,6 @@ const newToken = () => {
       return
     }
     let response = await tokenService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit)
-    console.log(response)
     if (response.data.status == 1) {
       setDisableSubmit(false)
       message.success('Add Token success!')

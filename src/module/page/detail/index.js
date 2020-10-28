@@ -66,7 +66,6 @@ const editToken = (props) => {
   const handleChange = (e) => {
     setNetwork(e)
   }
-console.log(props.type)
   return (
     <Row>
       <Col span={24}>

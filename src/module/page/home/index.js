@@ -23,9 +23,7 @@ const home = () => {
         [modalDetailVisible, setModalDetailVisible] = useState(false)
 
   const tokenService = new TokenService
-  console.log('modalDetailVisible',modalDetailVisible)
   useEffect(() => {
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     if (successResponse == true) {
       setModalDetailVisible(false)
       // setModalDetailVisible('')

@@ -25,7 +25,6 @@ const newToken = () => {
       return
     }
     let response = await tokenService.saveNetwork(network, explorer)
-    console.log(response)
     if (response.data.status == 1) {
       setDisableSubmit(false)
       message.success('Add Network success!')
