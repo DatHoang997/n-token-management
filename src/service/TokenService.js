@@ -211,10 +211,13 @@ export default class extends BaseService {
     return response
   }
 
-  async saveNetwork(network, explorer) {
+  async saveNetwork(network, explorer, segWit) {
     let formData = new FormData()
     formData.append("network", network)
     formData.append("explorer", explorer)
+    if (segWit == true || segWit == false) {
+      formData.append("segWit", segWit)
+    }
     try {
       let response = await axios.post(API.POST_SAVE_NETWORK, formData,
         {

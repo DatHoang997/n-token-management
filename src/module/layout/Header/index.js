@@ -31,29 +31,29 @@ const HeaderComponent = () => {
 
   return (
     <Menu mode="horizontal">
-      <Menu.Item key="1" icon={<HomeOutlined />}>
-        <Link to="/">Home</Link>
+      <Menu.Item key="1" icon={<UnorderedListOutlined />}>
+        <Link to="/">Token List</Link>
       </Menu.Item>
-      {(isAdmin || isEditor) &&
-        <Menu.Item key="2" icon={<PlusCircleOutlined />}>
-          <Link to="/newToken">Add new Token</Link>
-        </Menu.Item>
-      }
       {(isAdmin || isEditor) &&
         <Menu.Item key="3" icon={<CheckCircleOutlined />}>
           <Link to="/accept">Accept Token</Link>
         </Menu.Item>
       }
+      {(isAdmin || isEditor) &&
+        <Menu.Item key="2" icon={<PlusCircleOutlined />}>
+          <Link to="/newToken">Add new Token</Link>
+        </Menu.Item>
+      }
+      <Menu.Item key="5" icon={<UnorderedListOutlined />}>
+        <Link to="/networkList">Network List</Link>
+      </Menu.Item>
       {(isAdmin) &&
         <Menu.Item key="4" icon={<PlusCircleOutlined />}>
           <Link to="/newNetwork">Add new Network</Link>
         </Menu.Item>
       }
-      <Menu.Item key="5" icon={<UnorderedListOutlined />}>
-        <Link to="/networkList">Network list</Link>
-      </Menu.Item>
       <Menu.Item key="6" icon={<LogoutOutlined />} onClick={() => logout()}>
-        <span>logout</span>
+        <span>Log Out</span>
       </Menu.Item>
     </Menu>
   )

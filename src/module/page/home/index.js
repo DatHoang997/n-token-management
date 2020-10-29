@@ -120,7 +120,7 @@ const home = () => {
     <StandardPage>
       <Row className="center">
         <Col xs={24} md={24} lg={24}>
-          <h1>List Token</h1>
+          <h1>List of Tokens</h1>
         </Col>
       </Row>
       <Input className="margin-top-md" placeholder="search" onChange={searchToken}/>

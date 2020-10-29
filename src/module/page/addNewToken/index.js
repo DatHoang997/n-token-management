@@ -26,10 +26,15 @@ const newToken = () => {
         [logo, setLogo] = useState(''),
         [formatAddress, setFormatAddress] = useState(''),
         [segWit, setSegWit] = useState(''),
+        [IsSegWit, setIsSegWit] = useState(false),
         [disableSubmit, setDisableSubmit] = useState(false),
         [err, setErr] = useState('')
 
   const tokenService = new TokenService
+
+  const regexp = {
+    NUM: /^\d*\.?\d*$/
+  }
 
   const saveToken = async() => {
     setDisableSubmit(true)
@@ -59,14 +64,29 @@ const newToken = () => {
     }
   }
 
+  const getDecimal = (e) => {
+    setDisableSubmit(false)
+    if (regexp.NUM.test(e.target.value) || e.target.value == '') {
+      setDecimal(e.target.value)
+      setErr('')
+    } else {
+      setErr('Decimal must be number')
+    }
+  }
+
   const getSegWit = (checked) => {
     setSegWit(checked)
   }
 
-  const handleChange = (e) => {
-    setNetwork(e)
-    if(e == 'bitcoin' || e == 'litecoin' || e == 'bitcoin-test' || e == 'litecoin-test') {
-      setSegWit(false)
+  const getNetwork = (e) => {
+    let dot = e.indexOf('.')
+    let seg = e.slice(0, dot)
+    let net = e.slice(dot+1)
+    setNetwork(net)
+    if (seg == 'true') {
+      setIsSegWit(true)
+    } else {
+      setIsSegWit(false)
     }
   }
 
@@ -93,15 +113,15 @@ const newToken = () => {
           <p>Network : *</p>
         </Col>
         <Col xs={13} sm={13} lg={17}>
-          <Select className="search-token" placeholder="Network" onChange={handleChange} value={network}>
+          <Select className="search-token" placeholder="Network" onChange={getNetwork} value={network}>
             {Object.values(networkId).map((element) => {
-                if (element.networks) return <Option key={element._id} value={element.networks}>{element.networks}</Option>
-                else return
+              if (element.networks) return <Option key={element._id} value={element.isSegWit + '.' + element.networks}>{element.networks}</Option>
+              else return
             })}
           </Select>
         </Col>
       </Row>
-      { (network == 'bitcoin' || network == 'litecoin' || network == 'bitcoin-test' || network == 'litecoin-test') ?
+      { (IsSegWit == true) ?
         <Row className="padding-top-md">
           <Col xs={1} sm={1} lg={1}></Col>
           <Col xs={9} sm={9} lg={6}>
@@ -111,7 +131,7 @@ const newToken = () => {
             <Switch checkedChildren="true" unCheckedChildren="false" onChange={getSegWit}/>
           </Col>
         </Row>
-      :
+        :
         <Row></Row>
       }
       <Row className="padding-top-md">
@@ -129,7 +149,7 @@ const newToken = () => {
           <p>Decimal: *</p>
         </Col>
          <Col xs={13} sm={13} lg={17}>
-          <Input onChange={(e) => {setDecimal(e.target.value)}} value={decimal}/>
+          <Input onChange={getDecimal} value={decimal}/>
         </Col>
       </Row>
       <Row className="padding-top-md">

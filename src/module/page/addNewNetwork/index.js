@@ -13,6 +13,7 @@ const newToken = () => {
   const [network, setNetwork] = useState(''),
         [explorer, setExplorer] = useState(''),
         [disableSubmit, setDisableSubmit] = useState(false),
+        [segWit, setSegWit] = useState(false),
         [err, setErr] = useState('')
 
   const tokenService = new TokenService
@@ -24,13 +25,17 @@ const newToken = () => {
       setDisableSubmit(false)
       return
     }
-    let response = await tokenService.saveNetwork(network, explorer)
+    let response = await tokenService.saveNetwork(network, explorer, segWit)
     if (response.data.status == 1) {
       setDisableSubmit(false)
       message.success('Add Network success!')
       setNetwork('')
       setExplorer('')
     }
+  }
+
+  const getSegWit = (checked) => {
+    setSegWit(checked)
   }
 
   return (
@@ -57,6 +62,15 @@ const newToken = () => {
         </Col>
         <Col xs={13} sm={13} lg={17}>
           <Input onChange={(e) => {setExplorer(e.target.value)}} value={explorer} placeholder="https://explorer.nexty.io/"/>
+        </Col>
+      </Row>
+      <Row className="padding-top-md">
+        <Col xs={1} sm={1} lg={1}></Col>
+        <Col xs={9} sm={9} lg={6}>
+          <p>idSegWit :*</p>
+        </Col>
+        <Col xs={13} sm={13} lg={17}>
+        <Switch checkedChildren="true" unCheckedChildren="false" onChange={getSegWit}/>
         </Col>
       </Row>
       <Row className="padding-top-md">
