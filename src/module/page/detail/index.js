@@ -26,7 +26,6 @@ const editToken = (props) => {
         [chainType, setChainType] = useState(props.chainType && props.chainType != undefined ? props.chainType : ''),
         [address, setAddress] = useState(props.address && props.address != undefined ? props.address : ''),
         [logo, setLogo] = useState(props.logo && props.logo != undefined ? props.logo : ''),
-        [formatAddress, setFormatAddress] = useState(props.formatAddress && props.formatAddress != undefined ? props.formatAddress : ''),
         [segWit, setSegWit] = useState(props.segWit && props.segWit != undefined ? props.segWit : ''),
         [explorer, setExplorer] = useState(props.explorer && props.explorer != undefined ? props.explorer : ''),
         [dapp, setDapp] = useState(props.dapp && props.dapp != undefined ? props.dapp : ''),
@@ -50,7 +49,7 @@ const editToken = (props) => {
 
   const editToken = async() => {
     setDisableSubmit(true)
-    await dataService.editToken(_id, name, network, symbol, decimal, cmcId, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit, suffix, props.type)
+    await dataService.editToken(_id, name, network, symbol, decimal, cmcId, cgkId, apiSymbol, chainType, address, logo, segWit, suffix, props.type)
   }
 
   const editNetwork = async() => {
@@ -234,17 +233,6 @@ const editToken = (props) => {
             </Col>
             <Col span={13}>
               <Input onChange={(e) => {setSuffix(e.target.value)}} value={suffix} disabled={disableEdit}/>
-            </Col>
-          </Row>
-        }
-        { (props.type == 'token') &&
-          <Row className="padding-top-md">
-            <Col span={1}></Col>
-            <Col span={9}>
-              <p>Format address:</p>
-            </Col>
-            <Col span={13}>
-              <Input onChange={(e) => {setFormatAddress(e.target.value)}} value={formatAddress} disabled={disableEdit}/>
             </Col>
           </Row>
         }

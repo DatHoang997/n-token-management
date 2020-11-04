@@ -103,7 +103,6 @@ const home = () => {
                   chainType={element.chainType}
                   address={element.address}
                   logo={element.logo}
-                  formatAddress={element.format_address}
                   segWit={element.segWit}
                   suffix={element.suffix}
                   keys={key}

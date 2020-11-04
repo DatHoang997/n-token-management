@@ -24,7 +24,6 @@ const newToken = () => {
         [chainType, setChainType] = useState(''),
         [address, setAddress] = useState(''),
         [logo, setLogo] = useState(''),
-        [formatAddress, setFormatAddress] = useState(''),
         [segWit, setSegWit] = useState(''),
         [suffix, setSuffix] = useState(''),
         [IsSegWit, setIsSegWit] = useState(false),
@@ -44,7 +43,7 @@ const newToken = () => {
       setDisableSubmit(false)
       return
     }
-    let response = await dataService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit, suffix)
+    let response = await dataService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, segWit, suffix)
     if (response.data.status == 1) {
       setDisableSubmit(false)
       message.success('Add Token success!')
@@ -58,9 +57,9 @@ const newToken = () => {
       setChainType('')
       setAddress('')
       setLogo('')
-      setFormatAddress('')
       setSegWit('')
       setSuffix('')
+      setIsSegWit(false)
     } else {
       setErr('loi')
     }
@@ -87,6 +86,7 @@ const newToken = () => {
     setNetwork(net)
     if (seg == 'true') {
       setIsSegWit(true)
+      setSegWit(false)
     } else {
       setIsSegWit(false)
     }
@@ -215,14 +215,6 @@ const newToken = () => {
         </Col>
         <Col xs={13} sm={13} lg={17}>
           <Input onChange={(e) => {setSuffix(e.target.value)}} value={suffix}/>
-        </Col>
-      </Row><Row className="padding-top-md">
-        <Col xs={1} sm={1} lg={1}></Col>
-        <Col xs={9} sm={9} lg={6}>
-          <p>Format address:</p>
-        </Col>
-        <Col xs={13} sm={13} lg={17}>
-          <Input onChange={(e) => {setFormatAddress(e.target.value)}} value={formatAddress}/>
         </Col>
       </Row>
       <Row className="padding-top-md">

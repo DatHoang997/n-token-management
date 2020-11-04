@@ -22,7 +22,7 @@ const API = {
 }
 
 export default class extends BaseService {
-  async saveToken(name, network, symbol, decimal, cmcID = '', cgkId = '', apiSymbol = '', chainType = '', address = '', logo = '', formatAddress = '', segWit, suffix = '') {
+  async saveToken(name, network, symbol, decimal, cmcID = '', cgkId = '', apiSymbol = '', chainType = '', address = '', logo = '', segWit, suffix = '') {
     let formData = new FormData()
     formData.append("name", name)
     formData.append("network", network)
@@ -34,8 +34,8 @@ export default class extends BaseService {
     formData.append("chainType", chainType)
     formData.append("address", address)
     formData.append("logo", logo)
-    formData.append("format_address", formatAddress)
     formData.append("suffix", suffix)
+    console.log(segWit)
     if (segWit == true || segWit == false) {
       formData.append("segWit", segWit)
     }
@@ -103,7 +103,7 @@ export default class extends BaseService {
     }
   }
 
-  async editToken(_id, name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit, suffix, type) {
+  async editToken(_id, name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, segWit, suffix, type) {
     var that = this
     const dataRedux = this.store.getRedux('data')
     let formData = new FormData()
@@ -118,7 +118,6 @@ export default class extends BaseService {
     formData.append("chainType", chainType)
     formData.append("address", address)
     formData.append("logo", logo)
-    formData.append("format_address", formatAddress)
     formData.append("suffix", suffix)
     formData.append("segWit", segWit)
     try {
@@ -147,7 +146,6 @@ export default class extends BaseService {
           chainType: chainType,
           address: address,
           logo: logo,
-          format_address: formatAddress,
           segWit: segWit,
           suffix: suffix
         }
@@ -162,7 +160,6 @@ export default class extends BaseService {
           chainType: chainType,
           address: address,
           logo: logo,
-          format_address: formatAddress,
           segWit: segWit,
           suffix: suffix
         }
@@ -183,7 +180,6 @@ export default class extends BaseService {
           chainType: chainType,
           address: address,
           logo: logo,
-          format_address: formatAddress,
           segWit: segWit,
           suffix: suffix
         }
@@ -198,7 +194,6 @@ export default class extends BaseService {
           chainType: chainType,
           address: address,
           logo: logo,
-          format_address: formatAddress,
           segWit: segWit,
           suffix: suffix
         }
