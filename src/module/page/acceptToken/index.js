@@ -35,7 +35,6 @@ const home = () => {
   }, [successResponse])
 
   const searchToken = (e) => {
-    console.log(e.target.value)
     const items = Object.values(token).filter((data) => {
       if (e.target.value == '') {
         return data
@@ -47,11 +46,10 @@ const home = () => {
         return data
       }
     })
-    console.log(items)
     dispatch(dataRedux.searchListWaitingAccept_update(''))
     dispatch(dataRedux.searchListWaitingAccept_update(items))
   }
-console.log(token)
+
   const tokens = Object.values(tokenSearch).map((element, key) => {
     return (
       <Row className="margin-top-md token-table padding-top-xs" key={key}>
@@ -85,7 +83,6 @@ console.log(token)
               <button className='btn btn-info'
                 onClick={() => {
                   setModalDetailVisible(element._id)
-                  console.log('key', key)
                 }}>
                 detail
               </button>

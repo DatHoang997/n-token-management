@@ -36,7 +36,6 @@ const dapp = () => {
 
   const searchDapp = (e) => {
     const items = Object.values(Dapp).filter((data) => {
-      console.log(data.network)
       if (e.target.value == '') {
         return data
       }

@@ -35,7 +35,6 @@ export default class extends BaseService {
     formData.append("address", address)
     formData.append("logo", logo)
     formData.append("suffix", suffix)
-    console.log(segWit)
     if (segWit == true || segWit == false) {
       formData.append("segWit", segWit)
     }
@@ -61,7 +60,6 @@ export default class extends BaseService {
     axios.get(API.GET_ACCEPTED_TOKEN)
       .then(function (response) {
         var data = response.data.data
-        console.log('data',data)
         that.dispatch(dataRedux.actions.listToken_update(''))
         that.dispatch(dataRedux.actions.searchListToken_update(''))
         that.dispatch(dataRedux.actions.listToken_update(data))
@@ -121,13 +119,11 @@ export default class extends BaseService {
     formData.append("suffix", suffix)
     formData.append("segWit", segWit)
     try {
-      console.log('try')
       let response = await axios.put(API.PUT_EDIT_TOKEN, formData,
         {
           headers: {"Content-Type": "multipart/form-data"}
         }
       )
-      console.log('response', response)
       if (response.data.status == 1) {
         that.dispatch(dataRedux.actions.response_update(''))
         that.dispatch(dataRedux.actions.response_update(true))
@@ -288,7 +284,6 @@ export default class extends BaseService {
   }
 
   async saveDapp(name, title, url, img, network) {
-    console.log('save', name)
     let formData = new FormData()
     formData.append("name", name)
     formData.append("title", title)

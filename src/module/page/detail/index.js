@@ -40,7 +40,6 @@ const editToken = (props) => {
   const isAdmin = useSelector(state => state.user.isAdmin)
 
   useEffect(() => {
-    console.log(successResponse)
     if (successResponse == true) {
       setDisableEdit(true)
       setDisableSubmit(false)
