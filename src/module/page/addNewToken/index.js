@@ -3,7 +3,7 @@ import StandardPage from '../StandardPage'
 import {useSelector, useDispatch} from "react-redux"
 import { Input, Row, Col, Switch, message, Select } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import TokenService from '@/service/TokenService'
+import DataService from '@/service/DataService'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css'
 import './style.scss'
@@ -13,7 +13,7 @@ const { Option } = Select;
 const newToken = () => {
   useAuth()
   useEditor()
-  const networkId = useSelector(state => state.token.listNetWork),
+  const networkId = useSelector(state => state.data.listNetWork),
         [name, setName] = useState(''),
         [network, setNetwork] = useState(''),
         [symbol, setSymbol] = useState(''),
@@ -26,11 +26,12 @@ const newToken = () => {
         [logo, setLogo] = useState(''),
         [formatAddress, setFormatAddress] = useState(''),
         [segWit, setSegWit] = useState(''),
+        [suffix, setSuffix] = useState(''),
         [IsSegWit, setIsSegWit] = useState(false),
         [disableSubmit, setDisableSubmit] = useState(false),
         [err, setErr] = useState('')
 
-  const tokenService = new TokenService
+  const dataService = new DataService
 
   const regexp = {
     NUM: /^\d*\.?\d*$/
@@ -38,12 +39,12 @@ const newToken = () => {
 
   const saveToken = async() => {
     setDisableSubmit(true)
-    if (name == '' || network == '' || symbol == '' || decimal == '') {
+    if (name == '' || network == '' || decimal == '') {
       setErr('insert all require fields')
       setDisableSubmit(false)
       return
     }
-    let response = await tokenService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit)
+    let response = await dataService.saveToken(name, network, symbol, decimal, cmcID, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit, suffix)
     if (response.data.status == 1) {
       setDisableSubmit(false)
       message.success('Add Token success!')
@@ -59,6 +60,7 @@ const newToken = () => {
       setLogo('')
       setFormatAddress('')
       setSegWit('')
+      setSuffix('')
     } else {
       setErr('loi')
     }
@@ -137,7 +139,7 @@ const newToken = () => {
       <Row className="padding-top-md">
         <Col xs={1} sm={1} lg={1}></Col>
         <Col xs={9} sm={9} lg={6}>
-          <p>Symbol: *</p>
+          <p>Symbol:</p>
         </Col>
         <Col xs={13} sm={13} lg={17}>
           <Input onChange={(e) => {setSymbol(e.target.value)}} value={symbol}/>
@@ -191,7 +193,7 @@ const newToken = () => {
       <Row className="padding-top-md">
         <Col xs={1} sm={1} lg={1}></Col>
         <Col xs={9} sm={9} lg={6}>
-          <p>address:</p>
+          <p>Address:</p>
         </Col>
         <Col xs={13} sm={13} lg={17}>
           <Input onChange={(e) => {setAddress(e.target.value)}} value={address}/>
@@ -200,13 +202,21 @@ const newToken = () => {
       <Row className="padding-top-md">
         <Col xs={1} sm={1} lg={1}></Col>
         <Col xs={9} sm={9} lg={6}>
-          <p>logo:</p>
+          <p>Logo:</p>
         </Col>
         <Col xs={13} sm={13} lg={17}>
           <Input onChange={(e) => {setLogo(e.target.value)}} value={logo}/>
         </Col>
       </Row>
       <Row className="padding-top-md">
+        <Col xs={1} sm={1} lg={1}></Col>
+        <Col xs={9} sm={9} lg={6}>
+          <p>Suffix:</p>
+        </Col>
+        <Col xs={13} sm={13} lg={17}>
+          <Input onChange={(e) => {setSuffix(e.target.value)}} value={suffix}/>
+        </Col>
+      </Row><Row className="padding-top-md">
         <Col xs={1} sm={1} lg={1}></Col>
         <Col xs={9} sm={9} lg={6}>
           <p>Format address:</p>

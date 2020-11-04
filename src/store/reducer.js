@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import token from './redux/token'
+import data from './redux/data'
 import user from './redux/user'
 
 const default_state = {
@@ -18,5 +18,5 @@ export default combineReducers({
   app: appReducer,
   router: routerReducer,
   user: user.getReducer(),
-  token: token.getReducer(),
+  data: data.getReducer(),
 })

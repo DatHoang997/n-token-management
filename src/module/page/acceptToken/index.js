@@ -3,7 +3,7 @@ import StandardPage from '../StandardPage'
 import { Row, Col, Input, Popconfirm, Modal } from 'antd'
 import store from '@/store'
 import {useSelector, useDispatch} from "react-redux"
-import TokenService from '@/service/TokenService'
+import DataService from '@/service/DataService'
 import EditToken from '../detail/index'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
@@ -13,18 +13,18 @@ const home = () => {
   useAuth()
   useEditor()
         const dispatch = useDispatch(),
-        tokenRedux = store.getRedux('token').actions,
-        token = useSelector(state => state.token.listWaitingAccept),
-        tokenSearch = useSelector(state => state.token.searchListWaitingAccept),
-        successResponse = useSelector(state => state.token.response),
+        dataRedux = store.getRedux('data').actions,
+        token = useSelector(state => state.data.listWaitingAccept),
+        tokenSearch = useSelector(state => state.data.searchListWaitingAccept),
+        successResponse = useSelector(state => state.data.response),
         [modalDetailVisible, setModalDetailVisible] = useState(false)
 
   const isAdmin = useSelector(state => state.user.isAdmin)
 
-  const tokenService = new TokenService
+  const dataService = new DataService
 
   useEffect(() => {
-    tokenService.getWaitingToken()
+    dataService.getWaitingToken()
   }, [])
 
   useEffect(() => {
@@ -35,6 +35,7 @@ const home = () => {
   }, [successResponse])
 
   const searchToken = (e) => {
+    console.log(e.target.value)
     const items = Object.values(token).filter((data) => {
       if (e.target.value == '') {
         return data
@@ -46,19 +47,19 @@ const home = () => {
         return data
       }
     })
-    dispatch(tokenRedux.searchListToken_update(''))
-    dispatch(tokenRedux.searchListToken_update(items))
+    console.log(items)
+    dispatch(dataRedux.searchListWaitingAccept_update(''))
+    dispatch(dataRedux.searchListWaitingAccept_update(items))
   }
-
+console.log(token)
   const tokens = Object.values(tokenSearch).map((element, key) => {
-    let link = element.explorer
     return (
       <Row className="margin-top-md token-table padding-top-xs" key={key}>
-        <Col xs={1} md={1} lg={1} className="center">{key + 1}</Col>
+        <Col xs={2} md={2} lg={2} className="center">{key + 1}</Col>
         <Col xs={5} md={5} lg={3} className="center">
           <img className="token-logo" src={element.logo}></img>
         </Col>
-        <Col xs={13} md={13} lg={15}>
+        <Col xs={12} md={12} lg={14}>
           <Row>
             <Col xs={10} md={8} lg={4}>Name: </Col>
             <Col xs={14} md={16} lg={20}>{element.name}</Col>
@@ -74,7 +75,7 @@ const home = () => {
               {(isAdmin) &&
                 <button className='btn btn-accept'
                 onClick={() => {
-                  tokenService.acceptToken(element._id, key)
+                  dataService.acceptToken(element._id)
                 }}>
                   accept
                 </button>
@@ -83,7 +84,8 @@ const home = () => {
             <Col xs={24} md={24} lg={24} className="padding-top-xs">
               <button className='btn btn-info'
                 onClick={() => {
-                  setModalDetailVisible(key)
+                  setModalDetailVisible(element._id)
+                  console.log('key', key)
                 }}>
                 detail
               </button>
@@ -92,14 +94,15 @@ const home = () => {
               <Popconfirm
                 placement="top"
                 title="Delete this token ?"
-                onConfirm={() => tokenService.deleteToken(element._id, key, 'accept')}
+                onConfirm={() => dataService.deleteToken(element._id, 'accept')}
                 okText="yes"
                 cancelText="no"
               >
                 <button className='btn btn-delete'>remove</button>
               </Popconfirm>
+
               <Modal  title='Token detail'
-                      visible={modalDetailVisible === key}
+                      visible={modalDetailVisible === element._id}
                       footer={null}
                       onCancel={() => setModalDetailVisible(false)}>
                 <EditToken
@@ -116,8 +119,9 @@ const home = () => {
                   logo={element.logo}
                   formatAddress={element.format_address}
                   segWit={element.segWit}
+                  suffix={element.suffix}
                   keys={key}
-                  type="accept"
+                  type="token"
                   hideModal={() => setModalDetailVisible(false)}/>
               </Modal>
             </Col>
@@ -134,7 +138,7 @@ const home = () => {
           <h1>List Token</h1>
         </Col>
       </Row>
-      <Input className="margin-top-md" placeholder="search" onChange={searchToken}/>
+      {/* <Input className="margin-top-md" placeholder="Search Token or Network" onChange={searchToken}/> */}
       {tokens}
     </StandardPage>
   )

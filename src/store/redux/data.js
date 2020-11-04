@@ -1,8 +1,8 @@
 import BaseRedux from '@/model/BaseRedux'
 
-class tokenRedux extends BaseRedux {
+class dataRedux extends BaseRedux {
   defineTypes () {
-    return ['token']
+    return ['data']
   }
 
   defineDefaultState () {
@@ -13,9 +13,11 @@ class tokenRedux extends BaseRedux {
       searchListWaitingAccept : [],
       listNetWork: [],
       searchListNetWork: [],
+      searchListDapp: [],
+      listDapp: [],
       response : false,
     }
   }
 }
 
-export default new tokenRedux()
+export default new dataRedux()

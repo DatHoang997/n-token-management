@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import { Input, Row, Col, Switch, message, Select } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import TokenService from '@/service/TokenService'
+import DataService from '@/service/DataService'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
 import './style.scss'
@@ -12,7 +12,8 @@ const { Option } = Select;
 
 const editToken = (props) => {
   useAuth()
-  const networkId = useSelector(state => state.token.listNetWork),
+  const networkId = useSelector(state => state.data.listNetWork),
+        successResponse = useSelector(state => state.data.response),
         [_id, set_id] = useState(props._id && props._id != undefined ? props._id : ''),
         [name, setName] = useState(props.name && props.name != undefined ? props.name : ''),
         [network, setNetwork] = useState(props.network && props.network != undefined ? props.network : ''),
@@ -21,38 +22,56 @@ const editToken = (props) => {
         [cmcId, setCmcId] = useState(props.cmcId && props.cmcId != undefined ? props.cmcId : ''),
         [cgkId, setCgkId] = useState(props.cgkId && props.cgkId != undefined ? props.cgkId : ''),
         [apiSymbol, setApiSymbol] = useState(props.apiSymbol && props.apiSymbol != undefined ? props.apiSymbol : ''),
+        [suffix, setSuffix] = useState(props.suffix && props.suffix != undefined ? props.suffix : ''),
         [chainType, setChainType] = useState(props.chainType && props.chainType != undefined ? props.chainType : ''),
         [address, setAddress] = useState(props.address && props.address != undefined ? props.address : ''),
         [logo, setLogo] = useState(props.logo && props.logo != undefined ? props.logo : ''),
         [formatAddress, setFormatAddress] = useState(props.formatAddress && props.formatAddress != undefined ? props.formatAddress : ''),
         [segWit, setSegWit] = useState(props.segWit && props.segWit != undefined ? props.segWit : ''),
         [explorer, setExplorer] = useState(props.explorer && props.explorer != undefined ? props.explorer : ''),
+        [dapp, setDapp] = useState(props.dapp && props.dapp != undefined ? props.dapp : ''),
+        [title, setTitle] = useState(props.title && props.title != undefined ? props.title : ''),
+        [url, setUrl] = useState(props.url && props.url != undefined ? props.url : ''),
+        [img, setImg] = useState(props.img && props.img != undefined ? props.img : ''),
         [disableSubmit, setDisableSubmit] = useState(false),
         [disableEdit, setDisableEdit] = useState(true)
 
-  const tokenService = new TokenService
+  const dataService = new DataService
 
   const isAdmin = useSelector(state => state.user.isAdmin)
 
-  const editToken = async() => {
-    setDisableSubmit(true)
-    let response = await tokenService.editToken(_id, name, network, symbol, decimal, cmcId, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit, props.keys, props.type)
-    if (response) {
+  useEffect(() => {
+    console.log(successResponse)
+    if (successResponse == true) {
       setDisableEdit(true)
       setDisableSubmit(false)
-      message.success('Update Token success!')
     }
+  }, [successResponse])
+
+  const editToken = async() => {
+    setDisableSubmit(true)
+    await dataService.editToken(_id, name, network, symbol, decimal, cmcId, cgkId, apiSymbol, chainType, address, logo, formatAddress, segWit, suffix, props.type)
   }
 
   const editNetwork = async() => {
       setDisableEdit(true)
       setDisableSubmit(true)
-    let response = await tokenService.editNetwork(_id, network, explorer)
+    let response = await dataService.editNetwork(_id, network, explorer, segWit)
     if (response) {
       setDisableSubmit(false)
       message.success('Update Network success!')
     }
   }
+
+  const editDapp = async() => {
+    setDisableEdit(true)
+    setDisableSubmit(true)
+  let response = await dataService.editDapp(_id, dapp, title, url, img, network)
+  if (response) {
+    setDisableSubmit(false)
+    message.success('Update Dapp success!')
+  }
+}
 
   const edit = async() => {
     if(disableEdit == true) setDisableEdit(false)
@@ -66,6 +85,7 @@ const editToken = (props) => {
   const handleChange = (e) => {
     setNetwork(e)
   }
+
   return (
     <Row>
       <Col span={24}>
@@ -78,7 +98,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-page">
             <Col span={1}></Col>
             <Col span={9}>
@@ -89,7 +109,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
         <Row className="padding-top-md">
           <Col span={1}></Col>
           <Col span={9}>
@@ -105,20 +125,20 @@ const editToken = (props) => {
           </Col>
         </Row>
         }
-        { ((network == 'bitcoin' || network == 'litecoin' ||network == 'bitcoin-test' ||network == 'litecoin-test') && name) ?
+        { ((network == 'bitcoin' || network == 'litecoin' ||network == 'bitcoin-test' ||network == 'litecoin-test') && (props.type == 'token')) ?
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
               <p>isSegWit :</p>
             </Col>
             <Col span={13}>
-              <Switch checkedChildren="true" unCheckedChildren="false" onChange={getSegWit}/>
+              <Switch checkedChildren="true" unCheckedChildren="false" defaultChecked={segWit} disabled={disableEdit} onChange={getSegWit}/>
             </Col>
           </Row>
           :
           <Row></Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -129,7 +149,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -140,7 +160,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -151,7 +171,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -162,7 +182,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -173,7 +193,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -184,7 +204,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -195,7 +215,7 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -206,7 +226,18 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
-        { props.name &&
+        { (props.type == 'token') &&
+          <Row className="padding-top-md">
+            <Col span={1}></Col>
+            <Col span={9}>
+              <p>Suffix:</p>
+            </Col>
+            <Col span={13}>
+              <Input onChange={(e) => {setSuffix(e.target.value)}} value={suffix} disabled={disableEdit}/>
+            </Col>
+          </Row>
+        }
+        { (props.type == 'token') &&
           <Row className="padding-top-md">
             <Col span={1}></Col>
             <Col span={9}>
@@ -239,6 +270,72 @@ const editToken = (props) => {
             </Col>
           </Row>
         }
+        { (props.type == 'network') &&
+          <Row className="padding-top-md">
+            <Col span={1}></Col>
+            <Col span={9}>
+              <p>isSegWit:</p>
+            </Col>
+            <Col span={13}>
+              <Switch checkedChildren="true" unCheckedChildren="false" defaultChecked={segWit} disabled={disableEdit} onChange={getSegWit}/>
+            </Col>
+          </Row>
+        }
+        { (props.type == 'dapp') &&
+          <Row className="padding-top-md">
+            <Col span={1}></Col>
+            <Col span={9}>
+              <p>Name:</p>
+            </Col>
+            <Col span={13}>
+              <Input onChange={(e) => {setDapp(e.target.value)}} value={dapp} disabled={disableEdit}/>
+            </Col>
+          </Row>
+        }
+        { (props.type == 'dapp') &&
+          <Row className="padding-top-md">
+            <Col span={1}></Col>
+            <Col span={9}>
+              <p>Title:</p>
+            </Col>
+            <Col span={13}>
+              <Input onChange={(e) => {setTitle(e.target.value)}} value={title} disabled={disableEdit}/>
+            </Col>
+          </Row>
+        }
+        { (props.type == 'dapp') &&
+          <Row className="padding-top-md">
+            <Col span={1}></Col>
+            <Col span={9}>
+              <p>Url:</p>
+            </Col>
+            <Col span={13}>
+              <Input onChange={(e) => {setUrl(e.target.value)}} value={url} disabled={disableEdit}/>
+            </Col>
+          </Row>
+        }
+        { (props.type == 'dapp') &&
+          <Row className="padding-top-md">
+            <Col span={1}></Col>
+            <Col span={9}>
+              <p>Image:</p>
+            </Col>
+            <Col span={13}>
+              <Input onChange={(e) => {setImg(e.target.value)}} value={img} disabled={disableEdit}/>
+            </Col>
+          </Row>
+        }
+        { (props.type == 'dapp') &&
+          <Row className="padding-top-md">
+            <Col span={1}></Col>
+            <Col span={9}>
+              <p>Network:</p>
+            </Col>
+            <Col span={13}>
+              <Input onChange={(e) => {setNetwork(e.target.value)}} value={network} disabled={disableEdit}/>
+            </Col>
+          </Row>
+        }
       </Col>
       <Col span={24}>
         { (disableEdit == false) &&
@@ -254,6 +351,14 @@ const editToken = (props) => {
             { (props.type == 'network') &&
               <Col span={24} className="padding-top-md center">
                 <button className="btn-submit margin-top-md" onClick={editNetwork} disabled={disableSubmit}>
+                {disableSubmit && <span className="margin-right-sm"> <LoadingOutlined/></span>}
+                  <span>Submit</span>
+                </button>
+              </Col>
+            }
+            { (props.type == 'dapp') &&
+              <Col span={24} className="padding-top-md center">
+                <button className="btn-submit margin-top-md" onClick={editDapp} disabled={disableSubmit}>
                 {disableSubmit && <span className="margin-right-sm"> <LoadingOutlined/></span>}
                   <span>Submit</span>
                 </button>

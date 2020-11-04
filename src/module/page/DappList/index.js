@@ -1,37 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import StandardPage from '../StandardPage'
 import { Row, Col, Input, Popconfirm, Modal } from 'antd'
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import store from '@/store'
 import {useSelector, useDispatch} from "react-redux"
 import DataService from '@/service/DataService'
 import UserService from '@/service/UserService'
-import EditToken from '../detail/index'
+import Edit from '../detail/index'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
 import './style.scss'
 
-const home = () => {
+const dapp = () => {
   useAuth()
   const dispatch = useDispatch(),
         dataRedux = store.getRedux('data').actions,
-        token = useSelector(state => state.data.listToken),
-        tokenSearch = useSelector(state => state.data.searchListToken),
+        Dapp = useSelector(state => state.data.listDapp),
+        DappSearch = useSelector(state => state.data.searchListDapp),
         successResponse = useSelector(state => state.data.response),
         isAdmin = useSelector(state => state.user.isAdmin),
         isEditor = useSelector(state => state.user.isEditor),
         [modalDetailVisible, setModalDetailVisible] = useState(false)
 
-  const dataService = new DataService
+        const dataService = new DataService
+
+  useEffect(() => {
+    dataService.getDapp()
+  }, [])
+
   useEffect(() => {
     if (successResponse == true) {
       setModalDetailVisible(false)
-      // setModalDetailVisible('')
+      setModalDetailVisible('')
     }
   }, [successResponse])
 
-  const searchToken = (e) => {
-    const items = Object.values(token).filter((data) => {
+  const searchDapp = (e) => {
+    const items = Object.values(Dapp).filter((data) => {
+      console.log(data.network)
       if (e.target.value == '') {
         return data
       }
@@ -42,25 +47,50 @@ const home = () => {
         return data
       }
     })
-    dispatch(dataRedux.searchListToken_update(''))
-    dispatch(dataRedux.searchListToken_update(items))
+    dispatch(dataRedux.searchListDapp_update(''))
+    dispatch(dataRedux.searchListDapp_update(items))
   }
 
-  const tokens = Object.values(tokenSearch).map((element, key) => {
+  const dapps = Object.values(DappSearch).map((element, key) => {
     return (
-      <Row className="margin-top-md token-table padding-top-xs" key={key}>
+      <Row className="margin-top-md token-table padding-top-xs network" key={key}>
         <Col xs={2} md={2} lg={2} className="center">{key + 1}</Col>
-        <Col xs={5} md={5} lg={3} className="center">
-          <img className="token-logo" src={element.logo}></img>
+        <Col xs={5} md={5} lg={3}>
+          <Row>
+            <Col span={24}>
+              Name:
+            </Col>
+            <Col span={24}>
+              Title:
+            </Col>
+            <Col span={24}>
+              Url:
+            </Col>
+            <Col span={24}>
+              Image:
+            </Col>
+            <Col span={24}>
+              Network:
+            </Col>
+          </Row>
         </Col>
         <Col xs={12} md={12} lg={14}>
           <Row>
-            <Col xs={10} md={8} lg={4}>Name: </Col>
-            <Col xs={14} md={16} lg={20}>{element.name}</Col>
-            <Col xs={10} md={8} lg={4}>Network: </Col>
-            <Col xs={14} md={16} lg={20}>{element.network}</Col>
-            <Col xs={10} md={8} lg={4}>Address: </Col>
-            <Col xs={14} md={16} lg={20}><a href={element.explorer} target="_blank">{element.address}</a></Col>
+            <Col span={24}>
+              <p>{element.name}</p>
+            </Col>
+            <Col span={24}>
+              <p>{element.title}</p>
+            </Col>
+            <Col span={24}>
+              <p>{element.url}</p>
+            </Col>
+            <Col span={24}>
+              <p>{element.img}</p>
+            </Col>
+            <Col span={24}>
+              <p>{element.network}</p>
+            </Col>
           </Row>
         </Col>
         <Col xs={5} md={5} lg={5}>
@@ -79,35 +109,26 @@ const home = () => {
               {(isAdmin || isEditor) &&
                 <Popconfirm
                   placement="top"
-                  title="Delete this token ?"
-                  onConfirm={() => dataService.deleteToken(element._id, 'home')}
+                  title="Delete this Đapp ?"
+                  onConfirm={() => dataService.deleteDapp(element._id)}
                   okText="yes"
                   cancelText="no"
                 >
                   <button className='btn btn-delete'>remove</button>
                 </Popconfirm>
               }
-              <Modal  title='Token detail'
+              <Modal  title='Đapp detail'
                       visible={modalDetailVisible === key}
                       footer={null}
                       onCancel={() => setModalDetailVisible(false)}>
-                <EditToken
+                <Edit
                   _id={element._id}
-                  name={element.name}
-                  network={element.network}
-                  symbol={element.symbol}
-                  decimal={element.decimal}
-                  cmcId={element.cmcId}
-                  cgkId={element.cgkId}
-                  apiSymbol={element.apiSymbol}
-                  chainType={element.chainType}
-                  address={element.address}
-                  logo={element.logo}
-                  formatAddress={element.format_address}
-                  segWit={element.segWit}
-                  suffix={element.suffix}
+                  type='dapp'
+                  dapp={element.name}
+                  title={element.title}
+                  url={element.url}
+                  img={element.img}
                   keys={key}
-                  type="token"
                   hideModal={() => setModalDetailVisible(false)}/>
               </Modal>
             </Col>
@@ -121,13 +142,13 @@ const home = () => {
     <StandardPage>
       <Row className="center">
         <Col xs={24} md={24} lg={24}>
-          <h1>List of Tokens</h1>
+          <h1>List of Đapp</h1>
         </Col>
       </Row>
-      {/* <Input className="margin-top-md" placeholder="Search Token or Network" onChange={searchToken}/> */}
-      {tokens}
+      {/* <Input className="margin-top-md" placeholder="Search Đapp or Network" onChange={searchDapp}/> */}
+      {dapps}
     </StandardPage>
   )
 }
 
-export default home;
+export default dapp;

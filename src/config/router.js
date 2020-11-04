@@ -3,6 +3,8 @@ import NotFound from '@/module/page/error/notfound'
 import PermissionDenied from '@/module/page/error/PermissionDenied/'
 import AddNewToken from '@/module/page/addNewToken/index'
 import AddNewNetWork from '@/module/page/addNewNetwork/index'
+import AddNewDapp from '@/module/page/addNewDapp/index'
+import DappList from '@/module/page/DappList/index'
 import Home from '@/module/page/home/index'
 import NetworkList from '@/module/page/networkList/index'
 import Accept from '@/module/page/acceptToken/index'
@@ -24,18 +26,18 @@ export default [
     page: NotFound
   },
   {
-    path: '/newToken',
+    path: '/new-token',
     page: AddNewToken,
     editor: true,
     admin: true
   },
   {
-    path: '/newNetwork',
+    path: '/new-network',
     page: AddNewNetWork,
     admin: true
   },
   {
-    path: '/networkList',
+    path: '/network-list',
     page: NetworkList,
   },
   {
@@ -56,6 +58,14 @@ export default [
     page: Register,
   },
   {
-    page: NotFound
+    path: '/new-Dapp',
+    page: AddNewDapp,
+  },
+  {
+    path: '/Dapp-list',
+    page: DappList,
+  },
+  {
+    page: Home
   }
 ]

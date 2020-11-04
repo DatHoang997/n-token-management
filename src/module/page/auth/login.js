@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useParams, useHistory} from "react-router-dom";
 import {Row, Col} from 'antd';
 import UserService from "../../../service/UserService";
-import TokenService from "../../../service/TokenService";
+import DataService from "../../../service/DataService";
 import {setupWeb3} from "../../../util/auth";
 import {useSelector} from "react-redux";
 import {LoadingOutlined} from '@ant-design/icons'
@@ -16,7 +16,7 @@ export default () => {
         [requesting, setRequesting] = useState(false)
 
   const userService = new UserService,
-        tokenService = new TokenService
+        dataService = new DataService
 
   const login = async () => {
     setRequesting(true)

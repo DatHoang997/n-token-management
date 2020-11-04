@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import StandardPage from '../StandardPage'
 import { Input, Row, Col, Switch, message } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import TokenService from '@/service/TokenService'
+import DataService from '@/service/DataService'
 import { useAuth, useAdmin, useEditor  } from '../../../hooks/auth'
 import 'antd/dist/antd.css';
 import './style.scss'
@@ -16,7 +16,7 @@ const newToken = () => {
         [segWit, setSegWit] = useState(false),
         [err, setErr] = useState('')
 
-  const tokenService = new TokenService
+  const dataService = new DataService
 
   const saveToken = async() => {
     setDisableSubmit(true)
@@ -25,7 +25,7 @@ const newToken = () => {
       setDisableSubmit(false)
       return
     }
-    let response = await tokenService.saveNetwork(network, explorer, segWit)
+    let response = await dataService.saveNetwork(network, explorer, segWit)
     if (response.data.status == 1) {
       setDisableSubmit(false)
       message.success('Add Network success!')
@@ -67,10 +67,10 @@ const newToken = () => {
       <Row className="padding-top-md">
         <Col xs={1} sm={1} lg={1}></Col>
         <Col xs={9} sm={9} lg={6}>
-          <p>idSegWit :*</p>
+          <p>isSegWit :*</p>
         </Col>
         <Col xs={13} sm={13} lg={17}>
-        <Switch checkedChildren="true" unCheckedChildren="false" onChange={getSegWit}/>
+          <Switch checkedChildren="true" unCheckedChildren="false" onChange={getSegWit}/>
         </Col>
       </Row>
       <Row className="padding-top-md">
@@ -78,7 +78,7 @@ const newToken = () => {
         <Col xs={1} sm={13} lg={17} className="center">
           <button className="btn-submit margin-top-md" onClick={saveToken} disabled={disableSubmit}>
           {disableSubmit && <span className="margin-right-sm"> <LoadingOutlined/></span>}
-            <span>Add new Token</span>
+            <span>Add new Network</span>
           </button>
         </Col>
       </Row>
